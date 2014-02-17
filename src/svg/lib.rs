@@ -190,6 +190,60 @@ impl<'a> Svg<'a> {
         }.gen_output())
     }
     
+    pub fn g_begin(&mut self, 
+                   id: Option<~str>, 
+                   transform: Option<Transform>, 
+                   attribs: Option<HashMap<~str, ~str>>) {
+        self.content.push_str("<g ");
+        match id {
+            Some(i) => self.content.push_str(format!("id=\"{}\" ", i)),
+            None    => {/* nothing to do */}
+        }
+        match transform {
+            Some(t) => self.content.push_str(format!("{} ", t.get())),
+            None    => {/* nothing to do */}
+        }
+        match attribs {
+            Some(a) => {
+                for (at, value) in a.iter() {
+                    self.content.push_str(format!("{}=\"{}\" ", *at, *value))
+                }
+            },
+            None    => {/* nothing to do */}
+        }
+        self.content.push_str(">\n");
+    }
+
+    pub fn g_id(&mut self, id: &str) {
+        self.content.push_str(format!("<g id=\"{}\" >\n", id))
+    }
+
+    pub fn g_transform(&mut self, transform: Transform) {
+        self.content.push_str(format!("<g {} >\n", transform.get()))
+    }
+
+    pub fn g_translate(&mut self, x: i32, y: i32) {
+        let mut t = Transform::new();
+        t.translate(x, y);
+        self.content.push_str(format!("<g {} >\n", t.get()))
+    }
+
+    pub fn g_rotate(&mut self, angle: i32) {
+        let mut t = Transform::new();
+        t.rotate(angle);
+        self.content.push_str(format!("<g {} >\n", t.get()))
+    }
+
+    pub fn g_scale(&mut self, x_scale: i32, y_scale: i32) {
+        let mut t = Transform::new();
+        t.scale(x_scale, y_scale);
+        self.content.push_str(format!("<g {} >\n", t.get()))
+    }
+
+    pub fn g_end(&mut self) {
+        self.content.push_str("</g>\n");
+    }
+
     pub fn finalize(&mut self, output: &'a mut Writer) -> IoResult<()>{
         let mut o = ~"";
         

@@ -24,6 +24,26 @@ pub struct Transform {
     priv output: ~str
 }
 
+pub fn translate(x: i32, y: i32) -> ~str {
+    format!("translate({}, {})", x, y)
+}
+
+pub fn rotate(angle: i32) -> ~str {
+    format!("rotate({})", angle)
+}
+
+pub fn skew_x(factor: i32) -> ~str {
+    format!("skewX({})", factor)
+}
+
+pub fn skew_y(factor: i32) -> ~str {
+    format!("skewY({})", factor)
+}
+
+pub fn scale(x_scale: i32, y_scale: i32) -> ~str {
+    format!("scale({}, {})", x_scale, y_scale)
+}
+
 impl Transform {
     pub fn new() -> Transform {
         Transform {
@@ -38,23 +58,23 @@ impl Transform {
     }
 
     pub fn translate(&mut self, x: i32, y: i32) {
-        self.insert(format!("translate({}, {})", x, y))
+        self.insert(translate(x, y))
     }
 
     pub fn rotate(&mut self, angle: i32) {
-        self.insert(format!("rotate({})", angle))
+        self.insert(rotate(angle))
     }
 
     pub fn skew_x(&mut self, factor: i32) {
-        self.insert(format!("skewX({})", factor))
+        self.insert(skew_x(factor))
     }
 
     pub fn skew_y(&mut self, factor: i32) {
-        self.insert(format!("skewY({})", factor))
+        self.insert(skew_y(factor))
     }
 
     pub fn scale(&mut self, x_scale: i32, y_scale: i32) {
-        self.insert(format!("scale({}, {})", x_scale, y_scale))
+        self.insert(scale(x_scale, y_scale))
     }
 
     pub fn get(&self) -> ~str {

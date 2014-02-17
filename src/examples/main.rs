@@ -44,9 +44,13 @@ pub fn main() {
 	println!("{}", t.get());
 
 	image.view_box(0, 0, 1200, 400);
+	// image.g_begin(Some(~"First_Group"), Some(t.clone()), Some(attribs.clone()));
+	// image.g_transform(t.clone());
+	image.g_rotate(15);
 	image.circle(600, 200, 100, "fill=red stroke=blue stroke-width=10");
 	image.rect(700, 200, 200, 200, "fill=red stroke=blue stroke-width=10");
 	image.rounded_rect(800, 600, 200, 200, 60, 30, "fill=red stroke=blue stroke-width=10");
+	image.g_end();
 	image.set_title("Svg library test Main !");
 	image.set_desc("A simple main test for the rust svg generation library");
 
