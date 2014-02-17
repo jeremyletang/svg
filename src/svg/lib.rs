@@ -30,9 +30,11 @@
 use std::io::{Writer, IoResult};
 use std::hashmap::HashMap;
 
-pub use shapes::{Circle, Rect, RoundedRect};
+pub use shapes::{Circle, Rect, RoundedRect, Ellipse};
+pub use transform::Transform;
 
 mod shapes;
+mod transform;
 
 static DOC_TYPE: &'static str = "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \
 \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
@@ -63,7 +65,8 @@ struct Head {
     width: i32,
     height: i32,
     view_box: Option<(i32, i32, i32, i32)>,
-    
+    desc: Option<~str>,
+    title: Option<~str>
 }
 
 impl Head {
@@ -72,7 +75,9 @@ impl Head {
             standalone: false,
             width: width,
             height: height,
-            view_box: None
+            view_box: None,
+            desc: None,
+            title: None
         }
     }
 }
@@ -109,6 +114,14 @@ impl<'a> Svg<'a> {
                     width: i32, 
                     height: i32) {
         self.head.view_box = Some((orig_x, orig_y, width, height));
+    }
+
+    pub fn set_desc(&mut self, text: &str) {
+        self.head.desc = Some(text.to_owned())
+    }
+
+    pub fn set_title(&mut self, text: &str) {
+        self.head.title = Some(text.to_owned())
     }
 
     pub fn add<T: SVGEntity>(&mut self, new_entity: &T) {
@@ -148,18 +161,33 @@ impl<'a> Svg<'a> {
                         y: i32, 
                         width: i32, 
                         height: i32, 
-                        round_x: u32, 
-                        round_y: u32, 
+                        x_round: u32, 
+                        y_round: u32, 
                         attribs: &str) {
         self.content.push_str(RoundedRect {
                 x: x,
                 y: y,
                 width: width,
                 height: height,
-                round_x: round_x,
-                round_y: round_y,
+                x_round: x_round,
+                y_round: y_round,
                 attribs: make_attribs(attribs)
             }.gen_output())
+    }
+
+    pub fn ellipse(&mut self,
+                   x: i32,
+                   y: i32,
+                   x_radius: u32,
+                   y_radius: u32,
+                   attribs: &str) {
+        self.content.push_str(Ellipse {
+            x: x,
+            y: y,
+            x_radius: x_radius,
+            y_radius: y_radius,
+            attribs: make_attribs(attribs)
+        }.gen_output())
     }
     
     pub fn finalize(&mut self, output: &'a mut Writer) -> IoResult<()>{
@@ -180,7 +208,14 @@ impl<'a> Svg<'a> {
             None                        => {/* nothing to do */}
         }
         o.push_str(XMLNS);
-        
+        match self.head.title {
+            Some(ref t) => o.push_str(format!("<title>{}</title>\n", *t)),
+            None    => {/* nothing to do */}
+        }
+        match self.head.desc {
+            Some(ref d) => o.push_str(format!("<desc>{}</desc>\n", *d)),
+            None    => {/* nothing to do */}
+        }
         // Body
         o.push_str(self.content);
         

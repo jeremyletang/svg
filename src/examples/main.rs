@@ -26,24 +26,31 @@ extern crate svg;
 use std::io::{BufferedWriter, File, Truncate, ReadWrite};
 use std::hashmap::HashMap;
 
-use svg::{Svg, Circle, Rect, RoundedRect};
+use svg::Svg;
+use svg::Transform;
+// use svg::{Circle, Rect, RoundedRect};
 
 pub fn main() {
 	let mut output = BufferedWriter::new(File::open_mode(&Path::new("output.svg"), Truncate, ReadWrite)).unwrap();
-	let mut svg = Svg::new(12, 12);
+	let mut image = Svg::new(12, 12);
 	let mut attribs = HashMap::new();
 	attribs.insert(~"fill", ~"green");
 	attribs.insert(~"stroke", ~"orange");
 	attribs.insert(~"stroke-width", ~"2");
 
-	svg.view_box(0, 0, 1200, 400);
-	svg.circle(600, 200, 100, "fill=red stroke=blue stroke-width=10");
-	svg.add(&Circle {x: 100, y: 100, radius: 50, attribs: attribs.clone()});
-	svg.rect(700, 200, 200, 200, "fill=red stroke=blue stroke-width=10");
-	svg.add(&Rect {x: 200, y: 200, width: 200, height: 200, attribs: attribs.clone()});
-	svg.rounded_rect(800, 600, 200, 200, 60, 30, "fill=red stroke=blue stroke-width=10");
-	svg.add(&RoundedRect {x: 400, y: 400, width: 200, height: 200, round_x: 30, round_y: 30, attribs: attribs});
-	match svg.finalize(&mut output) {
+	let mut t = Transform::new();
+	t.translate(100, 200);
+	t.translate(10, 32);
+	println!("{}", t.get());
+
+	image.view_box(0, 0, 1200, 400);
+	image.circle(600, 200, 100, "fill=red stroke=blue stroke-width=10");
+	image.rect(700, 200, 200, 200, "fill=red stroke=blue stroke-width=10");
+	image.rounded_rect(800, 600, 200, 200, 60, 30, "fill=red stroke=blue stroke-width=10");
+	image.set_title("Svg library test Main !");
+	image.set_desc("A simple main test for the rust svg generation library");
+
+	match image.finalize(&mut output) {
 		Ok(_) 		=> {},
 		Err(err) 	=> fail!(err)
 	}

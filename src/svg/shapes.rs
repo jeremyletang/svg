@@ -32,13 +32,22 @@ pub struct Circle {
 }
 
 #[deriving(Show, Eq, ToStr)]
+pub struct Ellipse {
+    x: i32,
+    y: i32,
+    x_radius: u32,
+    y_radius: u32,
+    attribs: HashMap<~str, ~str>
+}
+
+#[deriving(Show, Eq, ToStr)]
 pub struct RoundedRect {
     x: i32,
     y: i32,
     width: i32,
     height: i32,
-    round_x: u32,
-    round_y: u32,
+    x_round: u32,
+    y_round: u32,
     attribs: HashMap<~str, ~str>
 }
 
@@ -68,6 +77,15 @@ impl SVGEntity for Circle {
     }
 }
 
+impl SVGEntity for Ellipse {
+    fn gen_output(&self) -> ~str {
+        let mut o = ~"";
+        o.push_str(format!("<ellipse cx=\"{}\" cy=\"{}\" rx=\"{}\" ry=\"{}\"",
+                           self.x, self.y, self.x_radius, self.y_radius));
+        insert_attribs(o, &self.attribs)
+    }
+}
+
 impl SVGEntity for Rect {
     fn gen_output(&self) -> ~str {
         let mut o = ~"";
@@ -83,7 +101,7 @@ impl SVGEntity for RoundedRect {
         o.push_str(format!("<rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\" \
                            rx=\"{}\" ry=\"{}\"",
                            self.x, self.y, self.width, self.height, 
-                           self.round_x, self.round_y));
+                           self.x_round, self.y_round));
         insert_attribs(o, &self.attribs)
     }
 }

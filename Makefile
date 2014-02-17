@@ -20,12 +20,15 @@
 #
 # 3. This notice may not be removed or altered from any source distribution.
 
-all: svg
+all: svg test
 
 svg:
 	mkdir -p lib
 	rustc --out-dir=lib src/svg/lib.rs
-	rustc -L ./lib/ main.rs
+
+test:
+	mkdir -p bin
+	rustc -L ./lib/ --out-dir=bin src/examples/main.rs
 
 doc:
 	mkdir -p doc
