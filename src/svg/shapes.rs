@@ -21,6 +21,7 @@
 
 use std::hashmap::HashMap;
 
+use transform::Transform;
 use SVGEntity;
 
 #[deriving(Show, Eq, ToStr)]
@@ -28,7 +29,8 @@ pub struct Circle {
     x: i32,
     y: i32,
     radius: u32,
-    attribs: HashMap<~str, ~str>
+    attribs: HashMap<~str, ~str>,
+    transform: Option<Transform>
 }
 
 #[deriving(Show, Eq, ToStr)]
@@ -37,7 +39,8 @@ pub struct Ellipse {
     y: i32,
     x_radius: u32,
     y_radius: u32,
-    attribs: HashMap<~str, ~str>
+    attribs: HashMap<~str, ~str>,
+    transform: Option<Transform>
 }
 
 #[deriving(Show, Eq, ToStr)]
@@ -48,7 +51,8 @@ pub struct RoundedRect {
     height: i32,
     x_round: u32,
     y_round: u32,
-    attribs: HashMap<~str, ~str>
+    attribs: HashMap<~str, ~str>,
+    transform: Option<Transform>
 }
 
 #[deriving(Show, Eq, ToStr)]
@@ -57,7 +61,8 @@ pub struct Rect {
     y: i32,
     width: i32,
     height: i32,
-    attribs: HashMap<~str, ~str>
+    attribs: HashMap<~str, ~str>,
+    transform: Option<Transform>
 }
 
 fn insert_attribs(mut o: ~str, attribs: &HashMap<~str, ~str>) -> ~str {
@@ -68,12 +73,20 @@ fn insert_attribs(mut o: ~str, attribs: &HashMap<~str, ~str>) -> ~str {
     o
 }
 
+fn insert_transform(mut o: ~str, transform: &Option<Transform>) -> ~str {
+    match *transform {
+        Some(ref t) => o.push_str(format!(" {}", t.get())),
+        None    => {/* nothing to do */}
+    }
+    o
+}
+
 impl SVGEntity for Circle {
     fn gen_output(&self) -> ~str {
         let mut o = ~"";
         o.push_str(format!("<circle cx=\"{}\" cy=\"{}\" r=\"{}\"",
                            self.x, self.y, self.radius));
-        insert_attribs(o, &self.attribs)
+        insert_attribs(insert_transform(o, &self.transform), &self.attribs)
     }
 }
 
@@ -82,7 +95,7 @@ impl SVGEntity for Ellipse {
         let mut o = ~"";
         o.push_str(format!("<ellipse cx=\"{}\" cy=\"{}\" rx=\"{}\" ry=\"{}\"",
                            self.x, self.y, self.x_radius, self.y_radius));
-        insert_attribs(o, &self.attribs)
+        insert_attribs(insert_transform(o, &self.transform), &self.attribs)
     }
 }
 
@@ -91,7 +104,7 @@ impl SVGEntity for Rect {
         let mut o = ~"";
         o.push_str(format!("<rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\"",
                            self.x, self.y, self.width, self.height));
-        insert_attribs(o, &self.attribs)
+        insert_attribs(insert_transform(o, &self.transform), &self.attribs)
     }
 }
 
@@ -102,6 +115,6 @@ impl SVGEntity for RoundedRect {
                            rx=\"{}\" ry=\"{}\"",
                            self.x, self.y, self.width, self.height, 
                            self.x_round, self.y_round));
-        insert_attribs(o, &self.attribs)
+        insert_attribs(insert_transform(o, &self.transform), &self.attribs)
     }
 }

@@ -137,7 +137,8 @@ impl<'a> Svg<'a> {
                 x: x,
                 y: y,
                 radius: radius,
-                attribs: make_attribs(attribs)
+                attribs: make_attribs(attribs),
+                transform: None
             }.gen_output())
     }
     
@@ -152,7 +153,8 @@ impl<'a> Svg<'a> {
                 y: y,
                 width: width,
                 height: height,
-                attribs: make_attribs(attribs)
+                attribs: make_attribs(attribs),
+                transform: None
             }.gen_output())
     }
     
@@ -171,7 +173,8 @@ impl<'a> Svg<'a> {
                 height: height,
                 x_round: x_round,
                 y_round: y_round,
-                attribs: make_attribs(attribs)
+                attribs: make_attribs(attribs),
+                transform: None
             }.gen_output())
     }
 
@@ -182,12 +185,13 @@ impl<'a> Svg<'a> {
                    y_radius: u32,
                    attribs: &str) {
         self.content.push_str(Ellipse {
-            x: x,
-            y: y,
-            x_radius: x_radius,
-            y_radius: y_radius,
-            attribs: make_attribs(attribs)
-        }.gen_output())
+                x: x,
+                y: y,
+                x_radius: x_radius,
+                y_radius: y_radius,
+                attribs: make_attribs(attribs),
+                transform: None
+            }.gen_output())
     }
     
     pub fn g_begin(&mut self, 
@@ -215,29 +219,41 @@ impl<'a> Svg<'a> {
     }
 
     pub fn g_id(&mut self, id: &str) {
-        self.content.push_str(format!("<g id=\"{}\" >\n", id))
+        self.g_begin(Some(id.to_owned()), None, None)
     }
 
     pub fn g_transform(&mut self, transform: Transform) {
-        self.content.push_str(format!("<g {} >\n", transform.get()))
+        self.g_begin(None, Some(transform), None)
     }
 
     pub fn g_translate(&mut self, x: i32, y: i32) {
         let mut t = Transform::new();
         t.translate(x, y);
-        self.content.push_str(format!("<g {} >\n", t.get()))
+        self.g_begin(None, Some(t), None)
     }
 
     pub fn g_rotate(&mut self, angle: i32) {
         let mut t = Transform::new();
         t.rotate(angle);
-        self.content.push_str(format!("<g {} >\n", t.get()))
+        self.g_begin(None, Some(t), None)
     }
 
     pub fn g_scale(&mut self, x_scale: i32, y_scale: i32) {
         let mut t = Transform::new();
         t.scale(x_scale, y_scale);
-        self.content.push_str(format!("<g {} >\n", t.get()))
+        self.g_begin(None, Some(t), None)
+    }
+
+    pub fn g_skew_x(&mut self, factor: i32) {
+        let mut t = Transform::new();
+        t.skew_x(factor);
+        self.g_begin(None, Some(t), None)
+    }
+
+    pub fn g_skew_y(&mut self, factor: i32) {
+        let mut t = Transform::new();
+        t.skew_y(factor);
+        self.g_begin(None, Some(t), None)
     }
 
     pub fn g_end(&mut self) {
