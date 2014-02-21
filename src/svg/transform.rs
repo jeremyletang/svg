@@ -50,7 +50,7 @@ impl Transform {
             output: ~"transform=\"\""
         }
     }
-    
+
     fn insert(&mut self, mut tr: ~str) {
         let len = self.output.len();
         if self.output.char_at(len - 2) != '\"' { tr.insert_char(0, ' ') }

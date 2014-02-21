@@ -113,7 +113,7 @@ impl SVGEntity for RoundedRect {
         let mut o = ~"";
         o.push_str(format!("<rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\" \
                            rx=\"{}\" ry=\"{}\"",
-                           self.x, self.y, self.width, self.height, 
+                           self.x, self.y, self.width, self.height,
                            self.x_round, self.y_round));
         insert_attribs(insert_transform(o, &self.transform), &self.attribs)
     }

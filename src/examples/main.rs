@@ -31,31 +31,33 @@ use svg::Transform;
 // use svg::{Circle, Rect, RoundedRect};
 
 pub fn main() {
-	let mut output = BufferedWriter::new(File::open_mode(&Path::new("output.svg"), Truncate, ReadWrite)).unwrap();
-	let mut image = Svg::new(12, 12);
-	let mut attribs = HashMap::new();
-	attribs.insert(~"fill", ~"green");
-	attribs.insert(~"stroke", ~"orange");
-	attribs.insert(~"stroke-width", ~"2");
+   let mut output = BufferedWriter::new(File::open_mode(&Path::new("output.svg"), Truncate, ReadWrite)).unwrap();
+   let mut image = Svg::new(12, 12);
+   let mut attribs = HashMap::new();
+   attribs.insert(~"fill", ~"green");
+   attribs.insert(~"stroke", ~"orange");
+   attribs.insert(~"stroke-width", ~"2");
 
-	let mut t = Transform::new();
-	t.translate(100, 200);
-	t.translate(10, 32);
-	println!("{}", t.get());
+   let mut t = Transform::new();
+   t.translate(100, 200);
+   t.translate(10, 32);
+   println!("{}", t.get());
 
-	image.view_box(0, 0, 1200, 400);
-	// image.g_begin(Some(~"First_Group"), Some(t.clone()), Some(attribs.clone()));
-	// image.g_transform(t.clone());
-	image.g_rotate(15);
-	image.circle(600, 200, 100, "fill=red stroke=blue stroke-width=10");
-	image.rect(700, 200, 200, 200, "fill=red stroke=blue stroke-width=10");
-	image.rounded_rect(800, 600, 200, 200, 60, 30, "fill=red stroke=blue stroke-width=10");
-	image.g_end();
-	image.set_title("Svg library test Main !");
-	image.set_desc("A simple main test for the rust svg generation library");
+   image.view_box(0, 0, 1200, 400);
+   image.g_begin(Some(~"First_Group"), Some(&t), Some(&attribs));
+   image.g_begin(Some(~"First_Group"), Some(&t), Some(&attribs));
+   // image.g_transform(t.clone());
+   //image.g_rotate(15);
+   image.circle(600, 200, 100, "fill=red stroke=blue stroke-width=10");
+   image.rect(700, 200, 200, 200, "fill=red stroke=blue stroke-width=10");
+   image.rounded_rect(800, 600, 200, 200, 60, 30, "fill=red stroke=blue stroke-width=10");
+   image.g_end();
+   image.g_end();
+   image.set_title("Svg library test Main !");
+   image.set_desc("A simple main test for the rust svg generation library");
 
-	match image.finalize(&mut output) {
-		Ok(_) 		=> {},
-		Err(err) 	=> fail!(err)
-	}
+    match image.finalize(&mut output) {
+        Ok(_) 		=> {},
+        Err(err) 	=> fail!(err)
+   }
 }

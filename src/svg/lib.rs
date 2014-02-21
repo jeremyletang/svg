@@ -47,15 +47,15 @@ trait SVGEntity {
     fn gen_output(&self) -> ~str;
 }
 
-pub fn rgb(red: u32,
-           green: u32, 
-           blue: u32) -> ~str {
+pub fn rgb(red: u8,
+           green: u8,
+           blue: u8) -> ~str {
     format!("rgb({}, {}, {})", red, green, blue)
 }
 
-pub fn rgba(red: u32, 
-            green: u32, 
-            blue: u32, 
+pub fn rgba(red: u8,
+            green: u8,
+            blue: u8,
             alpha: f32) -> ~str {
     format!("rgba({}, {}, {}, {})", red, green, blue, alpha)
 }
@@ -103,15 +103,15 @@ impl<'a> Svg<'a> {
             content: ~""
         }
     }
-    
-    pub fn standalone(&mut self, is_standalone: bool) {
-        self.head.standalone = is_standalone;
+
+    pub fn standalone(&mut self, standalone: bool) {
+        self.head.standalone = standalone;
     }
 
-    pub fn view_box(&mut self, 
-                    orig_x: i32, 
-                    orig_y: i32, 
-                    width: i32, 
+    pub fn view_box(&mut self,
+                    orig_x: i32,
+                    orig_y: i32,
+                    width: i32,
                     height: i32) {
         self.head.view_box = Some((orig_x, orig_y, width, height));
     }
@@ -128,10 +128,10 @@ impl<'a> Svg<'a> {
         self.content.push_str(new_entity.gen_output());
     }
 
-    pub fn circle(&mut self, 
-                  x: i32, 
-                  y: i32, 
-                  radius: u32, 
+    pub fn circle(&mut self,
+                  x: i32,
+                  y: i32,
+                  radius: u32,
                   attribs: &str) {
         self.content.push_str(Circle {
                 x: x,
@@ -141,12 +141,12 @@ impl<'a> Svg<'a> {
                 transform: None
             }.gen_output())
     }
-    
-    pub fn rect(&mut self, 
-                x: i32, 
-                y: i32, 
-                width: i32, 
-                height: i32, 
+
+    pub fn rect(&mut self,
+                x: i32,
+                y: i32,
+                width: i32,
+                height: i32,
                 attribs: &str) {
         self.content.push_str(Rect {
                 x: x,
@@ -157,14 +157,14 @@ impl<'a> Svg<'a> {
                 transform: None
             }.gen_output())
     }
-    
-    pub fn rounded_rect(&mut self, 
-                        x: i32, 
-                        y: i32, 
-                        width: i32, 
-                        height: i32, 
-                        x_round: u32, 
-                        y_round: u32, 
+
+    pub fn rounded_rect(&mut self,
+                        x: i32,
+                        y: i32,
+                        width: i32,
+                        height: i32,
+                        x_round: u32,
+                        y_round: u32,
                         attribs: &str) {
         self.content.push_str(RoundedRect {
                 x: x,
@@ -193,11 +193,11 @@ impl<'a> Svg<'a> {
                 transform: None
             }.gen_output())
     }
-    
-    pub fn g_begin(&mut self, 
-                   id: Option<~str>, 
-                   transform: Option<Transform>, 
-                   attribs: Option<HashMap<~str, ~str>>) {
+
+    pub fn g_begin(&mut self,
+                   id: Option<~str>,
+                   transform: Option<&Transform>,
+                   attribs: Option<&HashMap<~str, ~str>>) {
         self.content.push_str("<g ");
         match id {
             Some(i) => self.content.push_str(format!("id=\"{}\" ", i)),
@@ -222,38 +222,38 @@ impl<'a> Svg<'a> {
         self.g_begin(Some(id.to_owned()), None, None)
     }
 
-    pub fn g_transform(&mut self, transform: Transform) {
+    pub fn g_transform(&mut self, transform: &Transform) {
         self.g_begin(None, Some(transform), None)
+    }
+
+    pub fn g_attribs(&mut self, attribs: &HashMap<~str, ~str>) {
+        self.g_begin(None, None, Some(attribs))
     }
 
     pub fn g_translate(&mut self, x: i32, y: i32) {
         let mut t = Transform::new();
         t.translate(x, y);
-        self.g_begin(None, Some(t), None)
+        self.g_begin(None, Some(&t), None)
     }
 
     pub fn g_rotate(&mut self, angle: i32) {
         let mut t = Transform::new();
         t.rotate(angle);
-        self.g_begin(None, Some(t), None)
+        self.g_begin(None, Some(&t), None)
     }
 
     pub fn g_scale(&mut self, x_scale: i32, y_scale: i32) {
         let mut t = Transform::new();
         t.scale(x_scale, y_scale);
-        self.g_begin(None, Some(t), None)
+        self.g_begin(None, Some(&t), None)
     }
 
-    pub fn g_skew_x(&mut self, factor: i32) {
+    // FIXME: test if a skew of 0 for y or x don't break
+    pub fn g_skew(&mut self, x_factor: i32, y_factor: i32) {
         let mut t = Transform::new();
-        t.skew_x(factor);
-        self.g_begin(None, Some(t), None)
-    }
-
-    pub fn g_skew_y(&mut self, factor: i32) {
-        let mut t = Transform::new();
-        t.skew_y(factor);
-        self.g_begin(None, Some(t), None)
+        t.skew_x(x_factor);
+        t.skew_y(y_factor);
+        self.g_begin(None, Some(&t), None)
     }
 
     pub fn g_end(&mut self) {
@@ -262,14 +262,13 @@ impl<'a> Svg<'a> {
 
     pub fn finalize(&mut self, output: &'a mut Writer) -> IoResult<()>{
         let mut o = ~"";
-        
         // Head
         match self.head.standalone {
             true    => o.push_str(STANDALONE_YES),
             false   => o.push_str(STANDALONE_NO)
         };
         o.push_str(DOC_TYPE);
-        o.push_str(format!("<svg width=\"{}cm\" height=\"{}cm\" ", 
+        o.push_str(format!("<svg width=\"{}cm\" height=\"{}cm\" ",
                            self.head.width, self.head.height));
         match self.head.view_box {
             Some((x, y, width, height)) => {
@@ -288,7 +287,6 @@ impl<'a> Svg<'a> {
         }
         // Body
         o.push_str(self.content);
-        
         // Close
         o.push_str(&"</svg>\n");
         output.write_str(o)
