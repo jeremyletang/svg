@@ -19,12 +19,14 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-use std::hashmap::HashMap;
+extern crate collections;
+
+use collections::HashMap;
 
 use transform::Transform;
 use SVGEntity;
 
-#[deriving(Show, Eq, ToStr)]
+#[deriving(Show, Eq, Clone)]
 pub struct Circle {
     x: i32,
     y: i32,
@@ -33,7 +35,7 @@ pub struct Circle {
     transform: Option<Transform>
 }
 
-#[deriving(Show, Eq, ToStr)]
+#[deriving(Show, Eq, Clone)]
 pub struct Ellipse {
     x: i32,
     y: i32,
@@ -43,7 +45,7 @@ pub struct Ellipse {
     transform: Option<Transform>
 }
 
-#[deriving(Show, Eq, ToStr)]
+#[deriving(Show, Eq, Clone)]
 pub struct RoundedRect {
     x: i32,
     y: i32,
@@ -55,7 +57,7 @@ pub struct RoundedRect {
     transform: Option<Transform>
 }
 
-#[deriving(Show, Eq, ToStr)]
+#[deriving(Show, Eq, Clone)]
 pub struct Rect {
     x: i32,
     y: i32,

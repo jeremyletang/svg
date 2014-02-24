@@ -27,8 +27,10 @@
 // #[warn(missing_doc)];
 #[allow(dead_code)];
 
+extern crate collections;
+
 use std::io::{Writer, IoResult};
-use std::hashmap::HashMap;
+use collections::HashMap;
 
 pub use shapes::{Circle, Rect, RoundedRect, Ellipse};
 pub use transform::Transform;

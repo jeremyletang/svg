@@ -22,9 +22,10 @@
 #[crate_id = "svg_test#0.0.1"];
 
 extern crate svg;
+extern crate collections;
 
 use std::io::{BufferedWriter, File, Truncate, ReadWrite};
-use std::hashmap::HashMap;
+use collections::HashMap;
 
 use svg::Svg;
 use svg::Transform;
@@ -48,7 +49,7 @@ pub fn main() {
    image.g_begin(Some(~"First_Group"), Some(&t), Some(&attribs));
    // image.g_transform(t.clone());
    //image.g_rotate(15);
-   image.circle(600, 200, 100, "fill=red stroke=blue stroke-width=10");
+   image.circle(600, 200, 100, "id=jojo id=toto fill=red stroke=blue stroke-width=10");
    image.rect(700, 200, 200, 200, "fill=red stroke=blue stroke-width=10");
    image.rounded_rect(800, 600, 200, 200, 60, 30, "fill=red stroke=blue stroke-width=10");
    image.g_end();
