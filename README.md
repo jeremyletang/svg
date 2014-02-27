@@ -30,3 +30,7 @@ fn main() {
 }
 
 ```
+
+This is the simple way to use __libsvg__. Inside the SVG object a Shape struct is 
+create to represent each object. You can too create a Shape, modify it, and add it
+to the image using the method `SVG::add()`.
