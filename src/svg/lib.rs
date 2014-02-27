@@ -30,9 +30,10 @@
 extern crate collections;
 
 use std::io::{Writer, IoResult};
+use std::fmt::Show;
 use collections::HashMap;
 
-pub use shapes::{Circle, Rect, RoundedRect, Ellipse};
+pub use shapes::{Circle, Rect, RoundedRect, Ellipse, Line, PolyLine, Polygon};
 pub use transform::Transform;
 
 mod shapes;
@@ -84,7 +85,7 @@ impl Head {
     }
 }
 
-pub struct Svg<'a> {
+pub struct SVG<'a> {
     priv head: Head,
     priv content: ~str
 }
@@ -98,9 +99,9 @@ fn make_attribs(attribs: &str) -> HashMap<~str, ~str>{
     h
 }
 
-impl<'a> Svg<'a> {
-    pub fn new(width: i32, height: i32) -> Svg {
-        Svg {
+impl<'a> SVG<'a> {
+    pub fn new(width: i32, height: i32) -> SVG {
+        SVG {
             head: Head::new(width, height),
             content: ~""
         }
@@ -191,6 +192,42 @@ impl<'a> Svg<'a> {
                 y: y,
                 x_radius: x_radius,
                 y_radius: y_radius,
+                attribs: make_attribs(attribs),
+                transform: None
+            }.gen_output())
+    }
+
+    pub fn line(&mut self,
+                x1: i32,
+                y1: i32,
+                x2: i32,
+                y2: i32,
+                attribs: &str) {
+        self.content.push_str(Line {
+                x1: x1,
+                y1: y1,
+                x2: x2,
+                y2: y2,
+                attribs: make_attribs(attribs),
+                transform: None
+            }.gen_output())
+    }
+
+    pub fn polyline<T: Num + Show + Clone>(&mut self,
+                                           points: &[(T, T)],
+                                           attribs: &str) {
+        self.content.push_str(PolyLine {
+                points: points.to_owned(),
+                attribs: make_attribs(attribs),
+                transform: None
+            }.gen_output())
+    }
+
+    pub fn polygon<T: Num + Show + Clone>(&mut self,
+                                          points: &[(T, T)],
+                                          attribs: &str) {
+        self.content.push_str(Polygon {
+                points: points.to_owned(),
                 attribs: make_attribs(attribs),
                 transform: None
             }.gen_output())

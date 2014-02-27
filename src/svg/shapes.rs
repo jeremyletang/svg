@@ -21,6 +21,7 @@
 
 extern crate collections;
 
+use std::fmt::Show;
 use collections::HashMap;
 
 use transform::Transform;
@@ -41,6 +42,16 @@ pub struct Ellipse {
     y: i32,
     x_radius: u32,
     y_radius: u32,
+    attribs: HashMap<~str, ~str>,
+    transform: Option<Transform>
+}
+
+#[deriving(Show, Eq, Clone)]
+pub struct Line {
+    x1: i32,
+    y1: i32,
+    x2: i32,
+    y2: i32,
     attribs: HashMap<~str, ~str>,
     transform: Option<Transform>
 }
@@ -67,6 +78,32 @@ pub struct Rect {
     transform: Option<Transform>
 }
 
+#[deriving(Show, Eq, Clone)]
+pub struct PolyLine<T> {
+    points: ~[(T, T)],
+    attribs: HashMap<~str, ~str>,
+    transform: Option<Transform>
+}
+
+#[deriving(Show, Eq, Clone)]
+pub struct Polygon<T> {
+    points: ~[(T, T)],
+    attribs: HashMap<~str, ~str>,
+    transform: Option<Transform>
+}
+
+impl<T: Num + Show> PolyLine<T> {
+    pub fn add_point(&mut self, x: T, y: T) {
+        self.points.push((x, y))
+    }
+}
+
+impl<T: Num + Show> Polygon<T> {
+    pub fn add_point(&mut self, x: T, y: T) {
+        self.points.push((x, y))
+    }
+}
+
 fn insert_attribs(mut o: ~str, attribs: &HashMap<~str, ~str>) -> ~str {
     for (at, value) in attribs.iter() {
         o.push_str(format!(" {}=\"{}\"", *at, *value))
@@ -83,11 +120,45 @@ fn insert_transform(mut o: ~str, transform: &Option<Transform>) -> ~str {
     o
 }
 
+fn get_points<T: Num + Show>(points: &[(T, T)]) -> ~str {
+    let mut p: ~str = ~"points=\"";
+    for &(ref x, ref y) in points.iter() {
+        p.push_str(format!("{},{} ", x, y))
+    }
+    p.push_str("\"");
+    p
+}
+
 impl SVGEntity for Circle {
     fn gen_output(&self) -> ~str {
         let mut o = ~"";
         o.push_str(format!("<circle cx=\"{}\" cy=\"{}\" r=\"{}\"",
                            self.x, self.y, self.radius));
+        insert_attribs(insert_transform(o, &self.transform), &self.attribs)
+    }
+}
+
+impl<T: Num + Show> SVGEntity for PolyLine<T> {
+    fn gen_output(&self) -> ~str {
+        let mut o = ~"";
+        o.push_str(format!("<polyline {}", get_points(self.points)));
+        insert_attribs(insert_transform(o, &self.transform), &self.attribs)
+    }
+}
+
+impl<T: Num + Show> SVGEntity for Polygon<T> {
+    fn gen_output(&self) -> ~str {
+        let mut o = ~"";
+        o.push_str(format!("<polygon {}", get_points(self.points)));
+        insert_attribs(insert_transform(o, &self.transform), &self.attribs)
+    }
+}
+
+impl SVGEntity for Line {
+    fn gen_output(&self) -> ~str {
+        let mut o = ~"";
+        o.push_str(format!("<line x1=\"{}\" y1=\"{}\" x2=\"{}\" y2=\"{}\"",
+                           self.x1, self.y1, self.x2, self.y2));
         insert_attribs(insert_transform(o, &self.transform), &self.attribs)
     }
 }
