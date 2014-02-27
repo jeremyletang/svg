@@ -19,11 +19,10 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-extern crate collections;
-
 use std::fmt::Show;
 use collections::HashMap;
 
+use common::{insert_attribs, insert_transform, finalize};
 use transform::Transform;
 use SVGEntity;
 
@@ -104,22 +103,6 @@ impl<T: Num + Show> Polygon<T> {
     }
 }
 
-fn insert_attribs(mut o: ~str, attribs: &HashMap<~str, ~str>) -> ~str {
-    for (at, value) in attribs.iter() {
-        o.push_str(format!(" {}=\"{}\"", *at, *value))
-    }
-    o.push_str(" />\n");
-    o
-}
-
-fn insert_transform(mut o: ~str, transform: &Option<Transform>) -> ~str {
-    match *transform {
-        Some(ref t) => o.push_str(format!(" {}", t.get())),
-        None    => {/* nothing to do */}
-    }
-    o
-}
-
 fn get_points<T: Num + Show>(points: &[(T, T)]) -> ~str {
     let mut p: ~str = ~"points=\"";
     for &(ref x, ref y) in points.iter() {
@@ -134,7 +117,8 @@ impl SVGEntity for Circle {
         let mut o = ~"";
         o.push_str(format!("<circle cx=\"{}\" cy=\"{}\" r=\"{}\"",
                            self.x, self.y, self.radius));
-        insert_attribs(insert_transform(o, &self.transform), &self.attribs)
+        o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
+        finalize(o)
     }
 }
 
@@ -142,7 +126,8 @@ impl<T: Num + Show> SVGEntity for PolyLine<T> {
     fn gen_output(&self) -> ~str {
         let mut o = ~"";
         o.push_str(format!("<polyline {}", get_points(self.points)));
-        insert_attribs(insert_transform(o, &self.transform), &self.attribs)
+        o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
+        finalize(o)
     }
 }
 
@@ -150,7 +135,8 @@ impl<T: Num + Show> SVGEntity for Polygon<T> {
     fn gen_output(&self) -> ~str {
         let mut o = ~"";
         o.push_str(format!("<polygon {}", get_points(self.points)));
-        insert_attribs(insert_transform(o, &self.transform), &self.attribs)
+        o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
+        finalize(o)
     }
 }
 
@@ -159,7 +145,8 @@ impl SVGEntity for Line {
         let mut o = ~"";
         o.push_str(format!("<line x1=\"{}\" y1=\"{}\" x2=\"{}\" y2=\"{}\"",
                            self.x1, self.y1, self.x2, self.y2));
-        insert_attribs(insert_transform(o, &self.transform), &self.attribs)
+        o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
+        finalize(o)
     }
 }
 
@@ -168,7 +155,8 @@ impl SVGEntity for Ellipse {
         let mut o = ~"";
         o.push_str(format!("<ellipse cx=\"{}\" cy=\"{}\" rx=\"{}\" ry=\"{}\"",
                            self.x, self.y, self.x_radius, self.y_radius));
-        insert_attribs(insert_transform(o, &self.transform), &self.attribs)
+        o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
+        finalize(o)
     }
 }
 
@@ -177,7 +165,8 @@ impl SVGEntity for Rect {
         let mut o = ~"";
         o.push_str(format!("<rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\"",
                            self.x, self.y, self.width, self.height));
-        insert_attribs(insert_transform(o, &self.transform), &self.attribs)
+        o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
+        finalize(o)
     }
 }
 
@@ -188,6 +177,7 @@ impl SVGEntity for RoundedRect {
                            rx=\"{}\" ry=\"{}\"",
                            self.x, self.y, self.width, self.height,
                            self.x_round, self.y_round));
-        insert_attribs(insert_transform(o, &self.transform), &self.attribs)
+        o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
+        finalize(o)
     }
 }

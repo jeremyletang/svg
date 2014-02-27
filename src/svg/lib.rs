@@ -34,10 +34,13 @@ use std::fmt::Show;
 use collections::HashMap;
 
 pub use shapes::{Circle, Rect, RoundedRect, Ellipse, Line, PolyLine, Polygon};
+pub use text::Text;
 pub use transform::Transform;
 
 mod shapes;
+mod text;
 mod transform;
+mod common;
 
 static DOC_TYPE: &'static str = "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \
 \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
@@ -137,12 +140,12 @@ impl<'a> SVG<'a> {
                   radius: u32,
                   attribs: &str) {
         self.content.push_str(Circle {
-                x: x,
-                y: y,
-                radius: radius,
-                attribs: make_attribs(attribs),
-                transform: None
-            }.gen_output())
+            x: x,
+            y: y,
+            radius: radius,
+            attribs: make_attribs(attribs),
+            transform: None
+        }.gen_output())
     }
 
     pub fn rect(&mut self,
@@ -152,13 +155,13 @@ impl<'a> SVG<'a> {
                 height: i32,
                 attribs: &str) {
         self.content.push_str(Rect {
-                x: x,
-                y: y,
-                width: width,
-                height: height,
-                attribs: make_attribs(attribs),
-                transform: None
-            }.gen_output())
+            x: x,
+            y: y,
+            width: width,
+            height: height,
+            attribs: make_attribs(attribs),
+            transform: None
+        }.gen_output())
     }
 
     pub fn rounded_rect(&mut self,
@@ -170,15 +173,15 @@ impl<'a> SVG<'a> {
                         y_round: u32,
                         attribs: &str) {
         self.content.push_str(RoundedRect {
-                x: x,
-                y: y,
-                width: width,
-                height: height,
-                x_round: x_round,
-                y_round: y_round,
-                attribs: make_attribs(attribs),
-                transform: None
-            }.gen_output())
+            x: x,
+            y: y,
+            width: width,
+            height: height,
+            x_round: x_round,
+            y_round: y_round,
+            attribs: make_attribs(attribs),
+            transform: None
+        }.gen_output())
     }
 
     pub fn ellipse(&mut self,
@@ -188,13 +191,13 @@ impl<'a> SVG<'a> {
                    y_radius: u32,
                    attribs: &str) {
         self.content.push_str(Ellipse {
-                x: x,
-                y: y,
-                x_radius: x_radius,
-                y_radius: y_radius,
-                attribs: make_attribs(attribs),
-                transform: None
-            }.gen_output())
+            x: x,
+            y: y,
+            x_radius: x_radius,
+            y_radius: y_radius,
+            attribs: make_attribs(attribs),
+            transform: None
+        }.gen_output())
     }
 
     pub fn line(&mut self,
@@ -204,33 +207,47 @@ impl<'a> SVG<'a> {
                 y2: i32,
                 attribs: &str) {
         self.content.push_str(Line {
-                x1: x1,
-                y1: y1,
-                x2: x2,
-                y2: y2,
-                attribs: make_attribs(attribs),
-                transform: None
-            }.gen_output())
+            x1: x1,
+            y1: y1,
+            x2: x2,
+            y2: y2,
+            attribs: make_attribs(attribs),
+            transform: None
+        }.gen_output())
     }
 
     pub fn polyline<T: Num + Show + Clone>(&mut self,
                                            points: &[(T, T)],
                                            attribs: &str) {
         self.content.push_str(PolyLine {
-                points: points.to_owned(),
-                attribs: make_attribs(attribs),
-                transform: None
-            }.gen_output())
+            points: points.to_owned(),
+            attribs: make_attribs(attribs),
+            transform: None
+        }.gen_output())
     }
 
     pub fn polygon<T: Num + Show + Clone>(&mut self,
                                           points: &[(T, T)],
                                           attribs: &str) {
         self.content.push_str(Polygon {
-                points: points.to_owned(),
-                attribs: make_attribs(attribs),
-                transform: None
-            }.gen_output())
+            points: points.to_owned(),
+            attribs: make_attribs(attribs),
+            transform: None
+        }.gen_output())
+    }
+
+    pub fn text(&mut self,
+                x: i32,
+                y: i32,
+                text: &str,
+                attribs: &str) {
+        self.content.push_str(Text {
+            x: x,
+            y: y,
+            text: text.to_owned(),
+            attribs: make_attribs(attribs),
+            transform: None
+        }.gen_output())
     }
 
     pub fn g_begin(&mut self,
