@@ -119,11 +119,11 @@ impl<'a> SVG<'a> {
         self.head.view_box = Some((orig_x, orig_y, width, height));
     }
 
-    pub fn set_desc(&mut self, text: &str) {
+    pub fn desc(&mut self, text: &str) {
         self.head.desc = Some(text.to_owned())
     }
 
-    pub fn set_title(&mut self, text: &str) {
+    pub fn title(&mut self, text: &str) {
         self.head.title = Some(text.to_owned())
     }
 

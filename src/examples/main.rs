@@ -58,8 +58,8 @@ pub fn main() {
    image.polygon(polygon_points, "fill=red stroke=blue stroke-width=10");
    image.g_end();
    image.g_end();
-   image.set_title("Svg library test Main !");
-   image.set_desc("A simple main test for the rust svg generation library");
+   image.title("Svg library test Main !");
+   image.desc("A simple main test for the rust svg generation library");
 
     match image.finalize(&mut output) {
         Ok(_)       => {},
