@@ -34,6 +34,7 @@ use std::fmt::Show;
 use collections::HashMap;
 
 pub use shapes::{Circle, Rect, RoundedRect, Ellipse, Line, PolyLine, Polygon};
+pub use common::{rgb, rgba};
 pub use text::Text;
 pub use transform::Transform;
 
@@ -51,19 +52,6 @@ static STANDALONE_NO: &'static str = "<?xml version=\"1.0\" standalone=\"no\"?>\
 
 trait SVGEntity {
     fn gen_output(&self) -> ~str;
-}
-
-pub fn rgb(red: u8,
-           green: u8,
-           blue: u8) -> ~str {
-    format!("rgb({}, {}, {})", red, green, blue)
-}
-
-pub fn rgba(red: u8,
-            green: u8,
-            blue: u8,
-            alpha: f32) -> ~str {
-    format!("rgba({}, {}, {}, {})", red, green, blue, alpha)
 }
 
 struct Head {

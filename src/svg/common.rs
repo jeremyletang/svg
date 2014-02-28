@@ -39,3 +39,23 @@ pub fn insert_transform(mut o: ~str, transform: &Option<Transform>) -> ~str {
 }
 
 pub fn finalize(mut o: ~str) -> ~str { o.push_str(" />\n"); o }
+
+fn or_max<T: Num + Ord>(num: T, max: T) -> T {
+    if num < max { num } else { max }
+}
+
+pub fn rgb(red: u8,
+           green: u8,
+           blue: u8) -> ~str {
+    format!("rgb({}, {}, {})", or_max(red, 255), 
+                               or_max(green, 255), 
+                               or_max(blue, 255))
+}
+
+pub fn rgba(red: u8,
+            green: u8,
+            blue: u8,
+            alpha: f32) -> ~str {
+    format!("rgba({}, {}, {}, {})", or_max(red, 255), or_max(green, 255), or_max(blue, 255), or_max(alpha, 1.0))
+}
+
