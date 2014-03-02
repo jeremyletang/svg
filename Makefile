@@ -26,11 +26,11 @@ svg:
 	mkdir -p lib
 	rustc --out-dir=lib src/svg/lib.rs
 
-test:
+test: svg
 	mkdir -p bin
 	rustc -L ./lib/ --out-dir=bin src/examples/main.rs
 
-doc:
+docs:
 	mkdir -p doc
 	rustdoc -o doc src/svg/lib.rs
 

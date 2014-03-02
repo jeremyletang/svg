@@ -1,0 +1,9 @@
+before_install:
+  - yes | sudo add-apt-repository ppa:hansjorg/rust
+  - yes | sudo apt-add-repository ppa:sonkun/sfml-development
+  - sudo apt-get update
+install:
+  - sudo apt-get install rust-nightly
+script:
+  - rustc --version
+  - make
