@@ -21,6 +21,7 @@
 
 use std::fmt::Show;
 use collections::HashMap;
+use std::vec_ng::Vec;
 
 use common::{insert_attribs, insert_transform, finalize};
 use transform::Transform;
@@ -79,14 +80,14 @@ pub struct Rect {
 
 #[deriving(Show, Eq, Clone)]
 pub struct PolyLine<T> {
-    points: ~[(T, T)],
+    points: Vec<(T, T)>,
     attribs: HashMap<~str, ~str>,
     transform: Option<Transform>
 }
 
 #[deriving(Show, Eq, Clone)]
 pub struct Polygon<T> {
-    points: ~[(T, T)],
+    points: Vec<(T, T)>,
     attribs: HashMap<~str, ~str>,
     transform: Option<Transform>
 }
@@ -103,7 +104,7 @@ impl<T: Num + Show> Polygon<T> {
     }
 }
 
-fn get_points<T: Num + Show>(points: &[(T, T)]) -> ~str {
+fn get_points<T: Num + Show>(points: &Vec<(T, T)>) -> ~str {
     let mut p: ~str = ~"points=\"";
     for &(ref x, ref y) in points.iter() {
         p.push_str(format!("{},{} ", x, y))
@@ -125,7 +126,7 @@ impl SVGEntity for Circle {
 impl<T: Num + Show> SVGEntity for PolyLine<T> {
     fn gen_output(&self) -> ~str {
         let mut o = ~"";
-        o.push_str(format!("<polyline {}", get_points(self.points)));
+        o.push_str(format!("<polyline {}", get_points(&self.points)));
         o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
         finalize(o)
     }
@@ -134,7 +135,7 @@ impl<T: Num + Show> SVGEntity for PolyLine<T> {
 impl<T: Num + Show> SVGEntity for Polygon<T> {
     fn gen_output(&self) -> ~str {
         let mut o = ~"";
-        o.push_str(format!("<polygon {}", get_points(self.points)));
+        o.push_str(format!("<polygon {}", get_points(&self.points)));
         o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
         finalize(o)
     }

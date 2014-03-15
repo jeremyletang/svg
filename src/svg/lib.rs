@@ -26,11 +26,13 @@
 #[crate_type = "rlib"];
 // #[warn(missing_doc)];
 #[allow(dead_code)];
+#[allow(deprecated_owned_vector)];
 
 extern crate collections;
 
 use std::io::{Writer, IoResult};
 use std::fmt::Show;
+use std::vec_ng::Vec;
 use collections::HashMap;
 
 pub use shapes::{Circle, Rect, RoundedRect, Ellipse, Line, PolyLine, Polygon};
@@ -205,20 +207,20 @@ impl<'a> SVG<'a> {
     }
 
     pub fn polyline<T: Num + Show + Clone>(&mut self,
-                                           points: &[(T, T)],
+                                           points: &Vec<(T, T)>,
                                            attribs: &str) {
         self.content.push_str(PolyLine {
-            points: points.to_owned(),
+            points: points.clone(),
             attribs: make_attribs(attribs),
             transform: None
         }.gen_output())
     }
 
     pub fn polygon<T: Num + Show + Clone>(&mut self,
-                                          points: &[(T, T)],
+                                          points: &Vec<(T, T)>,
                                           attribs: &str) {
         self.content.push_str(Polygon {
-            points: points.to_owned(),
+            points: points.clone(),
             attribs: make_attribs(attribs),
             transform: None
         }.gen_output())

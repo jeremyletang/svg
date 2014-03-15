@@ -35,9 +35,9 @@ pub fn main() {
    let mut output = BufferedWriter::new(File::open_mode(&Path::new("output.svg"), Truncate, ReadWrite)).unwrap();
    let mut image = SVG::new(12, 12);
    let mut attribs = HashMap::new();
-   let polygon_points = ~[(350,75),  (379,161), (469,161), (397,215),
+   let polygon_points = vec!((350,75),  (379,161), (469,161), (397,215),
                           (423,301), (350,250), (277,301), (303,215),
-                          (231,161), (321,161)];
+                          (231,161), (321,161));
    attribs.insert(~"fill", ~"green");
    attribs.insert(~"stroke", ~"orange");
    attribs.insert(~"stroke-width", ~"2");
@@ -55,7 +55,7 @@ pub fn main() {
    image.circle(600, 200, 100, "id=jojo fill=red stroke=blue stroke-width=10");
    image.rect(700, 200, 200, 200, "fill=red stroke=blue stroke-width=10");
    image.rounded_rect(800, 600, 200, 200, 60, 30, "fill=red stroke=blue stroke-width=10");
-   image.polygon(polygon_points, "fill=red stroke=blue stroke-width=10");
+   image.polygon(&polygon_points, "fill=red stroke=blue stroke-width=10");
    image.g_end();
    image.g_end();
    image.title("Svg library test Main !");
