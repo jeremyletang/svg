@@ -21,7 +21,7 @@
 
 use std::fmt::Show;
 use collections::HashMap;
-use std::vec_ng::Vec;
+use std::vec::Vec;
 
 use common::{insert_attribs, insert_transform, finalize};
 use transform::Transform;

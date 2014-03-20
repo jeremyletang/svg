@@ -32,7 +32,7 @@ extern crate collections;
 
 use std::io::{Writer, IoResult};
 use std::fmt::Show;
-use std::vec_ng::Vec;
+use std::vec::Vec;
 use collections::HashMap;
 
 pub use shapes::{Circle, Rect, RoundedRect, Ellipse, Line, PolyLine, Polygon};
