@@ -19,14 +19,14 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#[crate_id = "svg#0.0.1"];
-#[desc = "SVG generation in Rust"];
-#[license = "MIT"];
-#[crate_type = "dylib"];
-#[crate_type = "rlib"];
-// #[warn(missing_doc)];
-#[allow(dead_code)];
-#[allow(deprecated_owned_vector)];
+#![crate_id = "svg#0.0.1"]
+#![desc = "SVG generation in Rust"]
+#![license = "MIT"]
+#![crate_type = "dylib"]
+#![crate_type = "rlib"]
+// #![warn(missing_doc)]
+#![allow(dead_code)]
+#![allow(deprecated_owned_vector)]
 
 extern crate collections;
 
