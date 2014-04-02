@@ -21,7 +21,7 @@
 
 #[deriving(Clone, Show, Eq)]
 pub struct Transform {
-    priv output: ~str
+    output: ~str
 }
 
 pub fn translate(x: i32, y: i32) -> ~str {

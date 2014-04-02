@@ -29,67 +29,67 @@ use SVGEntity;
 
 #[deriving(Show, Eq, Clone)]
 pub struct Circle {
-    x: i32,
-    y: i32,
-    radius: u32,
-    attribs: HashMap<~str, ~str>,
-    transform: Option<Transform>
+    pub x: i32,
+    pub y: i32,
+    pub radius: u32,
+    pub attribs: HashMap<~str, ~str>,
+    pub transform: Option<Transform>
 }
 
 #[deriving(Show, Eq, Clone)]
 pub struct Ellipse {
-    x: i32,
-    y: i32,
-    x_radius: u32,
-    y_radius: u32,
-    attribs: HashMap<~str, ~str>,
-    transform: Option<Transform>
+    pub x: i32,
+    pub y: i32,
+    pub x_radius: u32,
+    pub y_radius: u32,
+    pub attribs: HashMap<~str, ~str>,
+    pub transform: Option<Transform>
 }
 
 #[deriving(Show, Eq, Clone)]
 pub struct Line {
-    x1: i32,
-    y1: i32,
-    x2: i32,
-    y2: i32,
-    attribs: HashMap<~str, ~str>,
-    transform: Option<Transform>
+    pub x1: i32,
+    pub y1: i32,
+    pub x2: i32,
+    pub y2: i32,
+    pub attribs: HashMap<~str, ~str>,
+    pub transform: Option<Transform>
 }
 
 #[deriving(Show, Eq, Clone)]
 pub struct RoundedRect {
-    x: i32,
-    y: i32,
-    width: i32,
-    height: i32,
-    x_round: u32,
-    y_round: u32,
-    attribs: HashMap<~str, ~str>,
-    transform: Option<Transform>
+    pub x: i32,
+    pub y: i32,
+    pub width: i32,
+    pub height: i32,
+    pub x_round: u32,
+    pub y_round: u32,
+    pub attribs: HashMap<~str, ~str>,
+    pub transform: Option<Transform>
 }
 
 #[deriving(Show, Eq, Clone)]
 pub struct Rect {
-    x: i32,
-    y: i32,
-    width: i32,
-    height: i32,
-    attribs: HashMap<~str, ~str>,
-    transform: Option<Transform>
+    pub x: i32,
+    pub y: i32,
+    pub width: i32,
+    pub height: i32,
+    pub attribs: HashMap<~str, ~str>,
+    pub transform: Option<Transform>
 }
 
 #[deriving(Show, Eq, Clone)]
 pub struct PolyLine<T> {
-    points: Vec<(T, T)>,
-    attribs: HashMap<~str, ~str>,
-    transform: Option<Transform>
+    pub points: Vec<(T, T)>,
+    pub attribs: HashMap<~str, ~str>,
+    pub transform: Option<Transform>
 }
 
 #[deriving(Show, Eq, Clone)]
 pub struct Polygon<T> {
-    points: Vec<(T, T)>,
-    attribs: HashMap<~str, ~str>,
-    transform: Option<Transform>
+    pub points: Vec<(T, T)>,
+    pub attribs: HashMap<~str, ~str>,
+    pub transform: Option<Transform>
 }
 
 impl<T: Num + Show> PolyLine<T> {

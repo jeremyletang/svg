@@ -27,11 +27,11 @@ use SVGEntity;
 
 #[deriving(Show, Eq, Clone)]
 pub struct Text {
-    x: i32,
-    y: i32,
-    text: ~str,
-    attribs: HashMap<~str, ~str>,
-    transform: Option<Transform>
+    pub x: i32,
+    pub y: i32,
+    pub text: ~str,
+    pub attribs: HashMap<~str, ~str>,
+    pub transform: Option<Transform>
 }
 
 impl SVGEntity for Text {

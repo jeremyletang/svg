@@ -57,12 +57,12 @@ trait SVGEntity {
 }
 
 struct Head {
-    standalone: bool,
-    width: i32,
-    height: i32,
-    view_box: Option<(i32, i32, i32, i32)>,
-    desc: Option<~str>,
-    title: Option<~str>
+    pub standalone: bool,
+    pub width: i32,
+    pub height: i32,
+    pub view_box: Option<(i32, i32, i32, i32)>,
+    pub desc: Option<~str>,
+    pub title: Option<~str>
 }
 
 impl Head {
@@ -79,8 +79,8 @@ impl Head {
 }
 
 pub struct SVG<'a> {
-    priv head: Head,
-    priv content: ~str
+    head: Head,
+    content: ~str
 }
 
 fn make_attribs(attribs: &str) -> HashMap<~str, ~str>{
