@@ -53,7 +53,7 @@ static STANDALONE_YES: &'static str = "<?xml version=\"1.0\" standalone=\"yes\"?
 static STANDALONE_NO: &'static str = "<?xml version=\"1.0\" standalone=\"no\"?>\n";
 
 trait SVGEntity {
-    fn gen_output(&self) -> ~str;
+    fn gen_output(&self) -> StrBuf;
 }
 
 struct Head {
@@ -61,8 +61,8 @@ struct Head {
     pub width: i32,
     pub height: i32,
     pub view_box: Option<(i32, i32, i32, i32)>,
-    pub desc: Option<~str>,
-    pub title: Option<~str>
+    pub desc: Option<StrBuf>,
+    pub title: Option<StrBuf>
 }
 
 impl Head {
@@ -80,14 +80,14 @@ impl Head {
 
 pub struct SVG<'a> {
     head: Head,
-    content: ~str
+    content: StrBuf
 }
 
-fn make_attribs(attribs: &str) -> HashMap<~str, ~str>{
+fn make_attribs(attribs: &str) -> HashMap<StrBuf, StrBuf>{
     let mut h = HashMap::new();
     for s in attribs.split(' ') {
         let t: ~[&str] = s.split('=').collect();
-        h.insert(t[0].to_owned(), t[1].to_owned());
+        h.insert(t[0].to_strbuf(), t[1].to_strbuf());
     }
     h
 }
@@ -96,7 +96,7 @@ impl<'a> SVG<'a> {
     pub fn new(width: i32, height: i32) -> SVG {
         SVG {
             head: Head::new(width, height),
-            content: ~""
+            content: StrBuf::new()
         }
     }
 
@@ -113,15 +113,15 @@ impl<'a> SVG<'a> {
     }
 
     pub fn desc(&mut self, text: &str) {
-        self.head.desc = Some(text.to_owned())
+        self.head.desc = Some(text.to_strbuf())
     }
 
     pub fn title(&mut self, text: &str) {
-        self.head.title = Some(text.to_owned())
+        self.head.title = Some(text.to_strbuf())
     }
 
     pub fn add<T: SVGEntity>(&mut self, new_entity: &T) {
-        self.content.push_str(new_entity.gen_output());
+        self.content.push_str(new_entity.gen_output().into_owned());
     }
 
     pub fn circle(&mut self,
@@ -135,7 +135,7 @@ impl<'a> SVG<'a> {
             radius: radius,
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output())
+        }.gen_output().into_owned())
     }
 
     pub fn rect(&mut self,
@@ -151,7 +151,7 @@ impl<'a> SVG<'a> {
             height: height,
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output())
+        }.gen_output().into_owned())
     }
 
     pub fn rounded_rect(&mut self,
@@ -171,7 +171,7 @@ impl<'a> SVG<'a> {
             y_round: y_round,
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output())
+        }.gen_output().into_owned())
     }
 
     pub fn ellipse(&mut self,
@@ -187,7 +187,7 @@ impl<'a> SVG<'a> {
             y_radius: y_radius,
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output())
+        }.gen_output().into_owned())
     }
 
     pub fn line(&mut self,
@@ -203,7 +203,7 @@ impl<'a> SVG<'a> {
             y2: y2,
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output())
+        }.gen_output().into_owned())
     }
 
     pub fn polyline<T: Num + Show + Clone>(&mut self,
@@ -213,7 +213,7 @@ impl<'a> SVG<'a> {
             points: points.clone(),
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output())
+        }.gen_output().into_owned())
     }
 
     pub fn polygon<T: Num + Show + Clone>(&mut self,
@@ -223,7 +223,7 @@ impl<'a> SVG<'a> {
             points: points.clone(),
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output())
+        }.gen_output().into_owned())
     }
 
     pub fn text(&mut self,
@@ -237,13 +237,13 @@ impl<'a> SVG<'a> {
             text: text.to_owned(),
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output())
+        }.gen_output().into_owned())
     }
 
     pub fn g_begin(&mut self,
                    id: Option<~str>,
                    transform: Option<&Transform>,
-                   attribs: Option<&HashMap<~str, ~str>>) {
+                   attribs: Option<&HashMap<StrBuf, StrBuf>>) {
         self.content.push_str("<g ");
         match id {
             Some(i) => self.content.push_str(format!("id=\"{}\" ", i)),
@@ -272,7 +272,7 @@ impl<'a> SVG<'a> {
         self.g_begin(None, Some(transform), None)
     }
 
-    pub fn g_attribs(&mut self, attribs: &HashMap<~str, ~str>) {
+    pub fn g_attribs(&mut self, attribs: &HashMap<StrBuf, StrBuf>) {
         self.g_begin(None, None, Some(attribs))
     }
 
@@ -307,7 +307,7 @@ impl<'a> SVG<'a> {
     }
 
     pub fn finalize(&mut self, output: &'a mut Writer) -> IoResult<()>{
-        let mut o = ~"";
+        let mut o = StrBuf::new();
         // Head
         match self.head.standalone {
             true    => o.push_str(STANDALONE_YES),
@@ -332,9 +332,9 @@ impl<'a> SVG<'a> {
             None    => {/* nothing to do */}
         }
         // Body
-        o.push_str(self.content);
+        o.push_str(self.content.into_owned());
         // Close
         o.push_str(&"</svg>\n");
-        output.write_str(o)
+        output.write_str(o.into_owned())
     }
 }

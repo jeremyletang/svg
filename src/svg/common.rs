@@ -23,14 +23,14 @@ use collections::HashMap;
 
 use transform::Transform;
 
-pub fn insert_attribs(mut o: ~str, attribs: &HashMap<~str, ~str>) -> ~str {
+pub fn insert_attribs(mut o: StrBuf, attribs: &HashMap<StrBuf, StrBuf>) -> StrBuf {
     for (at, value) in attribs.iter() {
         o.push_str(format!(" {}=\"{}\"", *at, *value))
     }
     o
 }
 
-pub fn insert_transform(mut o: ~str, transform: &Option<Transform>) -> ~str {
+pub fn insert_transform(mut o: StrBuf, transform: &Option<Transform>) -> StrBuf {
     match *transform {
         Some(ref t) => o.push_str(format!(" {}", t.get())),
         None    => {/* nothing to do */}
@@ -38,7 +38,7 @@ pub fn insert_transform(mut o: ~str, transform: &Option<Transform>) -> ~str {
     o
 }
 
-pub fn finalize(mut o: ~str) -> ~str { o.push_str(" />\n"); o }
+pub fn finalize(mut o: StrBuf) -> StrBuf{ o.push_str(" />\n"); o }
 
 fn or_max<T: Num + Ord>(num: T, max: T) -> T {
     if num < max { num } else { max }
@@ -47,8 +47,8 @@ fn or_max<T: Num + Ord>(num: T, max: T) -> T {
 pub fn rgb(red: u8,
            green: u8,
            blue: u8) -> ~str {
-    format!("rgb({}, {}, {})", or_max(red, 255), 
-                               or_max(green, 255), 
+    format!("rgb({}, {}, {})", or_max(red, 255),
+                               or_max(green, 255),
                                or_max(blue, 255))
 }
 

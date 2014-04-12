@@ -30,13 +30,13 @@ pub struct Text {
     pub x: i32,
     pub y: i32,
     pub text: ~str,
-    pub attribs: HashMap<~str, ~str>,
+    pub attribs: HashMap<StrBuf, StrBuf>,
     pub transform: Option<Transform>
 }
 
 impl SVGEntity for Text {
-    fn gen_output(&self) -> ~str {
-        let mut o = ~"";
+    fn gen_output(&self) -> StrBuf {
+        let mut o = StrBuf::new();
         o.push_str(format!("<text x=\"{}\" y=\"{}\"",
                            self.x, self.y));
         o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
