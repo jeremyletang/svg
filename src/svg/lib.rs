@@ -332,9 +332,9 @@ impl<'a> SVG<'a> {
             None    => {/* nothing to do */}
         }
         // Body
-        o.push_str(self.content.into_owned());
+        o.push_str(self.content.clone().into_owned());
         // Close
-        o.push_str(&"</svg>\n");
+        o.push_str("</svg>\n");
         output.write_str(o.into_owned())
     }
 }

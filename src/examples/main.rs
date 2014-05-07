@@ -38,9 +38,9 @@ pub fn main() {
    let polygon_points = vec!((350,75),  (379,161), (469,161), (397,215),
                           (423,301), (350,250), (277,301), (303,215),
                           (231,161), (321,161));
-   attribs.insert(~"fill", ~"green");
-   attribs.insert(~"stroke", ~"orange");
-   attribs.insert(~"stroke-width", ~"2");
+   attribs.insert(StrBuf::from_str("fill"), StrBuf::from_str("green"));
+   attribs.insert(StrBuf::from_str("stroke"), StrBuf::from_str("orange"));
+   attribs.insert(StrBuf::from_str("stroke-width"), StrBuf::from_str("2"));
 
    let mut t = Transform::new();
    t.translate(100, 200);
@@ -48,8 +48,8 @@ pub fn main() {
    println!("{}", t.get());
 
    image.view_box(0, 0, 1200, 400);
-   image.g_begin(Some(~"First_Group"), Some(&t), Some(&attribs));
-   image.g_begin(Some(~"First_Group"), Some(&t), Some(&attribs));
+   image.g_begin(Some("First_Group".to_owned()), Some(&t), Some(&attribs));
+   image.g_begin(Some("First_Group".to_owned()), Some(&t), Some(&attribs));
    // image.g_transform(t.clone());
    //image.g_rotate(15);
    image.circle(600, 200, 100, "id=jojo fill=red stroke=blue stroke-width=10");

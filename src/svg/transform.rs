@@ -47,14 +47,14 @@ pub fn scale(x_scale: i32, y_scale: i32) -> ~str {
 impl Transform {
     pub fn new() -> Transform {
         Transform {
-            output: ~"transform=\"\""
+            output: "transform=\"\"".to_owned()
         }
     }
 
     fn insert(&mut self, mut tr: ~str) {
-        let len = self.output.len();
-        if self.output.char_at(len - 2) != '\"' { tr.insert_char(0, ' ') }
-        self.output.insert(len - 1, tr)
+        // let len = self.output.len();
+        // if self.output.char_at(len - 2) != '\"' { tr.insert_char(0, ' ') }
+        // self.output.insert(len - 1, tr)
     }
 
     pub fn translate(&mut self, x: i32, y: i32) {
