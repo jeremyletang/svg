@@ -51,7 +51,7 @@ impl Transform {
         }
     }
 
-    fn insert(&mut self, mut tr: ~str) {
+    fn insert(&mut self, tr: ~str) {
         // let len = self.output.len();
         // if self.output.char_at(len - 2) != '\"' { tr.insert_char(0, ' ') }
         // self.output.insert(len - 1, tr)

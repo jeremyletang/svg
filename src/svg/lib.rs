@@ -86,8 +86,8 @@ pub struct SVG<'a> {
 fn make_attribs(attribs: &str) -> HashMap<StrBuf, StrBuf>{
     let mut h = HashMap::new();
     for s in attribs.split(' ') {
-        let t: ~[&str] = s.split('=').collect();
-        h.insert(t[0].to_strbuf(), t[1].to_strbuf());
+        let t: Vec<&str> = s.split('=').collect();
+        h.insert(t.get(0).to_strbuf(), t.get(1).to_strbuf());
     }
     h
 }
