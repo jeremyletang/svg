@@ -48,8 +48,8 @@ pub fn main() {
    println!("{}", t.get());
 
    image.view_box(0, 0, 1200, 400);
-   image.g_begin(Some("First_Group".to_owned()), Some(&t), Some(&attribs));
-   image.g_begin(Some("First_Group".to_owned()), Some(&t), Some(&attribs));
+   image.g_begin(Some("First_Group"), Some(&t), Some(&attribs));
+   image.g_begin(Some("First_Group"), Some(&t), Some(&attribs));
    // image.g_transform(t.clone());
    //image.g_rotate(15);
    image.circle(600, 200, 100, "id=jojo fill=red stroke=blue stroke-width=10");

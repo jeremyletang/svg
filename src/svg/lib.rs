@@ -121,7 +121,7 @@ impl<'a> SVG<'a> {
     }
 
     pub fn add<T: SVGEntity>(&mut self, new_entity: &T) {
-        self.content.push_str(new_entity.gen_output().into_owned());
+        self.content.push_str(new_entity.gen_output().as_slice());
     }
 
     pub fn circle(&mut self,
@@ -135,7 +135,7 @@ impl<'a> SVG<'a> {
             radius: radius,
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output().into_owned())
+        }.gen_output().as_slice())
     }
 
     pub fn rect(&mut self,
@@ -151,7 +151,7 @@ impl<'a> SVG<'a> {
             height: height,
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output().into_owned())
+        }.gen_output().as_slice())
     }
 
     pub fn rounded_rect(&mut self,
@@ -171,7 +171,7 @@ impl<'a> SVG<'a> {
             y_round: y_round,
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output().into_owned())
+        }.gen_output().as_slice())
     }
 
     pub fn ellipse(&mut self,
@@ -187,7 +187,7 @@ impl<'a> SVG<'a> {
             y_radius: y_radius,
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output().into_owned())
+        }.gen_output().as_slice())
     }
 
     pub fn line(&mut self,
@@ -203,7 +203,7 @@ impl<'a> SVG<'a> {
             y2: y2,
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output().into_owned())
+        }.gen_output().as_slice())
     }
 
     pub fn polyline<T: Num + Show + Clone>(&mut self,
@@ -213,7 +213,7 @@ impl<'a> SVG<'a> {
             points: points.clone(),
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output().into_owned())
+        }.gen_output().as_slice())
     }
 
     pub fn polygon<T: Num + Show + Clone>(&mut self,
@@ -223,7 +223,7 @@ impl<'a> SVG<'a> {
             points: points.clone(),
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output().into_owned())
+        }.gen_output().as_slice())
     }
 
     pub fn text(&mut self,
@@ -237,26 +237,26 @@ impl<'a> SVG<'a> {
             text: text.to_owned(),
             attribs: make_attribs(attribs),
             transform: None
-        }.gen_output().into_owned())
+        }.gen_output().as_slice())
     }
 
     pub fn g_begin(&mut self,
-                   id: Option<~str>,
+                   id: Option<&str>,
                    transform: Option<&Transform>,
                    attribs: Option<&HashMap<StrBuf, StrBuf>>) {
         self.content.push_str("<g ");
         match id {
-            Some(i) => self.content.push_str(format!("id=\"{}\" ", i)),
+            Some(i) => self.content.push_str(format!("id=\"{}\" ", i).as_slice()),
             None    => {/* nothing to do */}
         }
         match transform {
-            Some(t) => self.content.push_str(format!("{} ", t.get())),
+            Some(t) => self.content.push_str(format!("{} ", t.get()).as_slice()),
             None    => {/* nothing to do */}
         }
         match attribs {
             Some(a) => {
                 for (at, value) in a.iter() {
-                    self.content.push_str(format!("{}=\"{}\" ", *at, *value))
+                    self.content.push_str(format!("{}=\"{}\" ", *at, *value).as_slice())
                 }
             },
             None    => {/* nothing to do */}
@@ -265,7 +265,7 @@ impl<'a> SVG<'a> {
     }
 
     pub fn g_id(&mut self, id: &str) {
-        self.g_begin(Some(id.to_owned()), None, None)
+        self.g_begin(Some(id.as_slice()), None, None)
     }
 
     pub fn g_transform(&mut self, transform: &Transform) {
@@ -315,26 +315,26 @@ impl<'a> SVG<'a> {
         };
         o.push_str(DOC_TYPE);
         o.push_str(format!("<svg width=\"{}cm\" height=\"{}cm\" ",
-                           self.head.width, self.head.height));
+                           self.head.width, self.head.height).as_slice());
         match self.head.view_box {
             Some((x, y, width, height)) => {
-                o.push_str(format!("viewBox=\"{} {} {} {}\" ", x, y, width, height))
+                o.push_str(format!("viewBox=\"{} {} {} {}\" ", x, y, width, height).as_slice())
             },
             None                        => {/* nothing to do */}
         }
         o.push_str(XMLNS);
         match self.head.title {
-            Some(ref t) => o.push_str(format!("<title>{}</title>\n", *t)),
+            Some(ref t) => o.push_str(format!("<title>{}</title>\n", *t).as_slice()),
             None    => {/* nothing to do */}
         }
         match self.head.desc {
-            Some(ref d) => o.push_str(format!("<desc>{}</desc>\n", *d)),
+            Some(ref d) => o.push_str(format!("<desc>{}</desc>\n", *d).as_slice()),
             None    => {/* nothing to do */}
         }
         // Body
-        o.push_str(self.content.clone().into_owned());
+        o.push_str(self.content.clone().as_slice());
         // Close
         o.push_str("</svg>\n");
-        output.write_str(o.into_owned())
+        output.write_str(o.as_slice())
     }
 }

@@ -21,37 +21,37 @@
 
 #[deriving(Clone, Show, Eq)]
 pub struct Transform {
-    output: ~str
+    output: StrBuf
 }
 
-pub fn translate(x: i32, y: i32) -> ~str {
+pub fn translate(x: i32, y: i32) -> StrBuf {
     format!("translate({}, {})", x, y)
 }
 
-pub fn rotate(angle: i32) -> ~str {
+pub fn rotate(angle: i32) -> StrBuf {
     format!("rotate({})", angle)
 }
 
-pub fn skew_x(factor: i32) -> ~str {
+pub fn skew_x(factor: i32) -> StrBuf {
     format!("skewX({})", factor)
 }
 
-pub fn skew_y(factor: i32) -> ~str {
+pub fn skew_y(factor: i32) -> StrBuf {
     format!("skewY({})", factor)
 }
 
-pub fn scale(x_scale: i32, y_scale: i32) -> ~str {
+pub fn scale(x_scale: i32, y_scale: i32) -> StrBuf {
     format!("scale({}, {})", x_scale, y_scale)
 }
 
 impl Transform {
     pub fn new() -> Transform {
         Transform {
-            output: "transform=\"\"".to_owned()
+            output: "transform=\"\"".to_strbuf()
         }
     }
 
-    fn insert(&mut self, tr: ~str) {
+    fn insert(&mut self, tr: StrBuf) {
         // let len = self.output.len();
         // if self.output.char_at(len - 2) != '\"' { tr.insert_char(0, ' ') }
         // self.output.insert(len - 1, tr)
@@ -77,7 +77,7 @@ impl Transform {
         self.insert(scale(x_scale, y_scale))
     }
 
-    pub fn get(&self) -> ~str {
+    pub fn get(&self) -> StrBuf {
         self.output.clone()
     }
 }

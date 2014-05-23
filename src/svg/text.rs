@@ -29,7 +29,7 @@ use SVGEntity;
 pub struct Text {
     pub x: i32,
     pub y: i32,
-    pub text: ~str,
+    pub text: StrBuf,
     pub attribs: HashMap<StrBuf, StrBuf>,
     pub transform: Option<Transform>
 }
@@ -38,9 +38,9 @@ impl SVGEntity for Text {
     fn gen_output(&self) -> StrBuf {
         let mut o = StrBuf::new();
         o.push_str(format!("<text x=\"{}\" y=\"{}\"",
-                           self.x, self.y));
+                           self.x, self.y).as_slice());
         o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
-        o.push_str(format!(" >{}</text>", self.text));
+        o.push_str(format!(" >{}</text>", self.text).as_slice());
         o
     }
 }

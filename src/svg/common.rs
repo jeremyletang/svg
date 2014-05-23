@@ -25,14 +25,14 @@ use transform::Transform;
 
 pub fn insert_attribs(mut o: StrBuf, attribs: &HashMap<StrBuf, StrBuf>) -> StrBuf {
     for (at, value) in attribs.iter() {
-        o.push_str(format!(" {}=\"{}\"", *at, *value))
+        o.push_str(format!(" {}=\"{}\"", *at, *value).as_slice())
     }
     o
 }
 
 pub fn insert_transform(mut o: StrBuf, transform: &Option<Transform>) -> StrBuf {
     match *transform {
-        Some(ref t) => o.push_str(format!(" {}", t.get())),
+        Some(ref t) => o.push_str(format!(" {}", t.get()).as_slice()),
         None    => {/* nothing to do */}
     }
     o
@@ -46,7 +46,7 @@ fn or_max<T: Num + Ord>(num: T, max: T) -> T {
 
 pub fn rgb(red: u8,
            green: u8,
-           blue: u8) -> ~str {
+           blue: u8) -> StrBuf {
     format!("rgb({}, {}, {})", or_max(red, 255),
                                or_max(green, 255),
                                or_max(blue, 255))
@@ -55,7 +55,11 @@ pub fn rgb(red: u8,
 pub fn rgba(red: u8,
             green: u8,
             blue: u8,
-            alpha: f32) -> ~str {
-    format!("rgba({}, {}, {}, {})", or_max(red, 255), or_max(green, 255), or_max(blue, 255), or_max(alpha, 1.0))
+            alpha: f32) -> StrBuf {
+    format!("rgba({}, {}, {}, {})",
+            or_max(red, 255),
+            or_max(green, 255),
+            or_max(blue, 255),
+            or_max(alpha, 1.0))
 }
 
