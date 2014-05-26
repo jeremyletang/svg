@@ -53,7 +53,7 @@ static STANDALONE_YES: &'static str = "<?xml version=\"1.0\" standalone=\"yes\"?
 static STANDALONE_NO: &'static str = "<?xml version=\"1.0\" standalone=\"no\"?>\n";
 
 trait SVGEntity {
-    fn gen_output(&self) -> StrBuf;
+    fn gen_output(&self) -> String;
 }
 
 struct Head {
@@ -61,8 +61,8 @@ struct Head {
     pub width: i32,
     pub height: i32,
     pub view_box: Option<(i32, i32, i32, i32)>,
-    pub desc: Option<StrBuf>,
-    pub title: Option<StrBuf>
+    pub desc: Option<String>,
+    pub title: Option<String>
 }
 
 impl Head {
@@ -80,10 +80,10 @@ impl Head {
 
 pub struct SVG<'a> {
     head: Head,
-    content: StrBuf
+    content: String
 }
 
-fn make_attribs(attribs: &str) -> HashMap<StrBuf, StrBuf>{
+fn make_attribs(attribs: &str) -> HashMap<String, String>{
     let mut h = HashMap::new();
     for s in attribs.split(' ') {
         let t: Vec<&str> = s.split('=').collect();
@@ -96,7 +96,7 @@ impl<'a> SVG<'a> {
     pub fn new(width: i32, height: i32) -> SVG {
         SVG {
             head: Head::new(width, height),
-            content: StrBuf::new()
+            content: String::new()
         }
     }
 
@@ -243,7 +243,7 @@ impl<'a> SVG<'a> {
     pub fn g_begin(&mut self,
                    id: Option<&str>,
                    transform: Option<&Transform>,
-                   attribs: Option<&HashMap<StrBuf, StrBuf>>) {
+                   attribs: Option<&HashMap<String, String>>) {
         self.content.push_str("<g ");
         match id {
             Some(i) => self.content.push_str(format!("id=\"{}\" ", i).as_slice()),
@@ -272,7 +272,7 @@ impl<'a> SVG<'a> {
         self.g_begin(None, Some(transform), None)
     }
 
-    pub fn g_attribs(&mut self, attribs: &HashMap<StrBuf, StrBuf>) {
+    pub fn g_attribs(&mut self, attribs: &HashMap<String, String>) {
         self.g_begin(None, None, Some(attribs))
     }
 
@@ -307,7 +307,7 @@ impl<'a> SVG<'a> {
     }
 
     pub fn finalize(&mut self, output: &'a mut Writer) -> IoResult<()>{
-        let mut o = StrBuf::new();
+        let mut o = String::new();
         // Head
         match self.head.standalone {
             true    => o.push_str(STANDALONE_YES),

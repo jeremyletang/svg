@@ -23,14 +23,14 @@ use collections::HashMap;
 
 use transform::Transform;
 
-pub fn insert_attribs(mut o: StrBuf, attribs: &HashMap<StrBuf, StrBuf>) -> StrBuf {
+pub fn insert_attribs(mut o: String, attribs: &HashMap<String, String>) -> String {
     for (at, value) in attribs.iter() {
         o.push_str(format!(" {}=\"{}\"", *at, *value).as_slice())
     }
     o
 }
 
-pub fn insert_transform(mut o: StrBuf, transform: &Option<Transform>) -> StrBuf {
+pub fn insert_transform(mut o: String, transform: &Option<Transform>) -> String {
     match *transform {
         Some(ref t) => o.push_str(format!(" {}", t.get()).as_slice()),
         None    => {/* nothing to do */}
@@ -38,7 +38,7 @@ pub fn insert_transform(mut o: StrBuf, transform: &Option<Transform>) -> StrBuf 
     o
 }
 
-pub fn finalize(mut o: StrBuf) -> StrBuf{ o.push_str(" />\n"); o }
+pub fn finalize(mut o: String) -> String{ o.push_str(" />\n"); o }
 
 fn or_max<T: Num + Ord>(num: T, max: T) -> T {
     if num < max { num } else { max }
@@ -46,7 +46,7 @@ fn or_max<T: Num + Ord>(num: T, max: T) -> T {
 
 pub fn rgb(red: u8,
            green: u8,
-           blue: u8) -> StrBuf {
+           blue: u8) -> String {
     format!("rgb({}, {}, {})", or_max(red, 255),
                                or_max(green, 255),
                                or_max(blue, 255))
@@ -55,7 +55,7 @@ pub fn rgb(red: u8,
 pub fn rgba(red: u8,
             green: u8,
             blue: u8,
-            alpha: f32) -> StrBuf {
+            alpha: f32) -> String {
     format!("rgba({}, {}, {}, {})",
             or_max(red, 255),
             or_max(green, 255),

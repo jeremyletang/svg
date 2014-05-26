@@ -29,14 +29,14 @@ use SVGEntity;
 pub struct Text {
     pub x: i32,
     pub y: i32,
-    pub text: StrBuf,
-    pub attribs: HashMap<StrBuf, StrBuf>,
+    pub text: String,
+    pub attribs: HashMap<String, String>,
     pub transform: Option<Transform>
 }
 
 impl SVGEntity for Text {
-    fn gen_output(&self) -> StrBuf {
-        let mut o = StrBuf::new();
+    fn gen_output(&self) -> String {
+        let mut o = String::new();
         o.push_str(format!("<text x=\"{}\" y=\"{}\"",
                            self.x, self.y).as_slice());
         o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);

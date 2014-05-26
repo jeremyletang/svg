@@ -38,9 +38,9 @@ pub fn main() {
    let polygon_points = vec!((350,75),  (379,161), (469,161), (397,215),
                           (423,301), (350,250), (277,301), (303,215),
                           (231,161), (321,161));
-   attribs.insert(StrBuf::from_str("fill"), StrBuf::from_str("green"));
-   attribs.insert(StrBuf::from_str("stroke"), StrBuf::from_str("orange"));
-   attribs.insert(StrBuf::from_str("stroke-width"), StrBuf::from_str("2"));
+   attribs.insert(String::from_str("fill"), String::from_str("green"));
+   attribs.insert(String::from_str("stroke"), String::from_str("orange"));
+   attribs.insert(String::from_str("stroke-width"), String::from_str("2"));
 
    let mut t = Transform::new();
    t.translate(100, 200);
