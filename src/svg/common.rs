@@ -60,6 +60,6 @@ pub fn rgba(red: u8,
             or_max(red, 255),
             or_max(green, 255),
             or_max(blue, 255),
-            or_max(alpha, 1.0))
+            if alpha < 1.0 { alpha } else { 1.0 })
 }
 

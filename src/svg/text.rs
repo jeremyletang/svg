@@ -25,7 +25,7 @@ use common::{insert_attribs, insert_transform};
 use transform::Transform;
 use SVGEntity;
 
-#[deriving(Show, Eq, Clone)]
+#[deriving(Show, PartialEq, Clone)]
 pub struct Text {
     pub x: i32,
     pub y: i32,

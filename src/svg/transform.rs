@@ -19,7 +19,7 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#[deriving(Clone, Show, Eq)]
+#[deriving(Clone, Show, PartialEq)]
 pub struct Transform {
     output: String
 }
@@ -47,7 +47,7 @@ pub fn scale(x_scale: i32, y_scale: i32) -> String {
 impl Transform {
     pub fn new() -> Transform {
         Transform {
-            output: "transform=\"\"".to_strbuf()
+            output: "transform=\"\"".to_string()
         }
     }
 

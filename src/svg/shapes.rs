@@ -27,7 +27,7 @@ use common::{insert_attribs, insert_transform, finalize};
 use transform::Transform;
 use SVGEntity;
 
-#[deriving(Show, Eq, Clone)]
+#[deriving(Show, PartialEq, Clone)]
 pub struct Circle {
     pub x: i32,
     pub y: i32,
@@ -36,7 +36,7 @@ pub struct Circle {
     pub transform: Option<Transform>
 }
 
-#[deriving(Show, Eq, Clone)]
+#[deriving(Show, PartialEq, Clone)]
 pub struct Ellipse {
     pub x: i32,
     pub y: i32,
@@ -46,7 +46,7 @@ pub struct Ellipse {
     pub transform: Option<Transform>
 }
 
-#[deriving(Show, Eq, Clone)]
+#[deriving(Show, PartialEq, Clone)]
 pub struct Line {
     pub x1: i32,
     pub y1: i32,
@@ -56,7 +56,7 @@ pub struct Line {
     pub transform: Option<Transform>
 }
 
-#[deriving(Show, Eq, Clone)]
+#[deriving(Show, PartialEq, Clone)]
 pub struct RoundedRect {
     pub x: i32,
     pub y: i32,
@@ -68,7 +68,7 @@ pub struct RoundedRect {
     pub transform: Option<Transform>
 }
 
-#[deriving(Show, Eq, Clone)]
+#[deriving(Show, PartialEq, Clone)]
 pub struct Rect {
     pub x: i32,
     pub y: i32,
@@ -78,14 +78,14 @@ pub struct Rect {
     pub transform: Option<Transform>
 }
 
-#[deriving(Show, Eq, Clone)]
+#[deriving(Show, PartialEq, Clone)]
 pub struct PolyLine<T> {
     pub points: Vec<(T, T)>,
     pub attribs: HashMap<String, String>,
     pub transform: Option<Transform>
 }
 
-#[deriving(Show, Eq, Clone)]
+#[deriving(Show, PartialEq, Clone)]
 pub struct Polygon<T> {
     pub points: Vec<(T, T)>,
     pub attribs: HashMap<String, String>,

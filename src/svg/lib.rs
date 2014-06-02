@@ -87,7 +87,7 @@ fn make_attribs(attribs: &str) -> HashMap<String, String>{
     let mut h = HashMap::new();
     for s in attribs.split(' ') {
         let t: Vec<&str> = s.split('=').collect();
-        h.insert(t.get(0).to_strbuf(), t.get(1).to_strbuf());
+        h.insert(t.get(0).to_string(), t.get(1).to_string());
     }
     h
 }
@@ -113,11 +113,11 @@ impl<'a> SVG<'a> {
     }
 
     pub fn desc(&mut self, text: &str) {
-        self.head.desc = Some(text.to_strbuf())
+        self.head.desc = Some(text.to_string())
     }
 
     pub fn title(&mut self, text: &str) {
-        self.head.title = Some(text.to_strbuf())
+        self.head.title = Some(text.to_string())
     }
 
     pub fn add<T: SVGEntity>(&mut self, new_entity: &T) {
@@ -234,7 +234,7 @@ impl<'a> SVG<'a> {
         self.content.push_str(Text {
             x: x,
             y: y,
-            text: text.to_owned(),
+            text: text.to_string(),
             attribs: make_attribs(attribs),
             transform: None
         }.gen_output().as_slice())
