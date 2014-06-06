@@ -22,10 +22,9 @@
 #![crate_id = "svg_test#0.0.1"]
 
 extern crate svg;
-extern crate collections;
 
 use std::io::{BufferedWriter, File, Truncate, ReadWrite};
-use collections::HashMap;
+use std::collections::HashMap;
 
 use svg::SVG;
 use svg::Transform;

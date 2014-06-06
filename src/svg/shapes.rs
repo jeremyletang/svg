@@ -20,8 +20,8 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 use std::fmt::Show;
-use collections::HashMap;
 use std::vec::Vec;
+use std::collections::HashMap;
 
 use common::{insert_attribs, insert_transform, finalize};
 use transform::Transform;
