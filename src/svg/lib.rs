@@ -26,7 +26,6 @@
 #![crate_type = "rlib"]
 // #![warn(missing_doc)]
 #![allow(dead_code)]
-#![allow(deprecated_owned_vector)]
 
 use std::io::{Writer, IoResult};
 use std::fmt::Show;
