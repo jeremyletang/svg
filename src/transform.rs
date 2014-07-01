@@ -51,6 +51,7 @@ impl Transform {
         }
     }
 
+    #[allow(unused_variable)]
     fn insert(&mut self, tr: String) {
         // let len = self.output.len();
         // if self.output.char_at(len - 2) != '\"' { tr.insert_char(0, ' ') }
