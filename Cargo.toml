@@ -1,0 +1,11 @@
+[package]
+name = "svg"
+version = "0.0.1"
+authors = ["letang.jeremy@gmail.com"]
+
+[[lib]]
+name = "svg"
+crate-type = ["rlib", "dylib"]
+
+[[bin]]
+name = "test"
