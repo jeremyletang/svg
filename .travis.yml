@@ -1,14 +1,13 @@
 env:
   global:
     - secure: RsmPQGoRoHHjgWlpIDKIney/etMXcE3kP+rtS74RSNDznQpykRcYgZpoVMg0isIM/VZYPnMJ3zRPxFVe7lamRX5DScskVp6rTK9PN32pHm4W54MnWOFZtuZijd5QxCwlnM1nJFZLrsZOV6DmA/7eKTZkz/T2BuISnB+Y+G7c2sQ=
+    - LD_LIBRARY_PATH=/usr/local/lib
 before_install:
   - yes | sudo add-apt-repository ppa:cmrx64/cargo
   - sudo apt-get update
 install:
   - sudo apt-get install cargo
-  - wget http://static.rust-lang.org/dist/rust-nightly-x86_64-unknown-linux-gnu.tar.gz
-  - tar xzf rust-nightly-x86_64-unknown-linux-gnu.tar.gz
-  - export PATH=$PATH:$(pwd)/rust-nightly-x86_64-unknown-linux-gnu/bin
+  - curl http://www.rust-lang.org/rustup.sh | sudo sh -
 script:
   - rustc --version
   - cargo build

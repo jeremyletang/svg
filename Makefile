@@ -24,7 +24,7 @@ all: svg test
 
 svg:
 	mkdir -p lib
-	rustc --out-dir=lib src/svg/rgtk.rs
+	rustc --out-dir=lib src/svg/svg.rs
 
 test: svg
 	mkdir -p bin
@@ -32,7 +32,7 @@ test: svg
 
 docs:
 	mkdir -p doc
-	rustdoc -o doc src/svg/rgtk.rs
+	rustdoc -o doc src/svg/svg.rs
 
 clean:
 	rm -rf lib
