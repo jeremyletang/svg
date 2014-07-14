@@ -32,7 +32,7 @@ test: svg
 
 docs:
 	mkdir -p doc
-	rustdoc -o doc src/svg/svg.rs
+	rustdoc -o doc src/svg.rs
 
 clean:
 	rm -rf lib
