@@ -84,13 +84,13 @@ fn make_attribs(attribs: &str) -> HashMap<String, String>{
     let mut h = HashMap::new();
     for s in attribs.split(' ') {
         let t: Vec<&str> = s.split('=').collect();
-        h.insert(t.get(0).to_string(), t.get(1).to_string());
+        h.insert(t[0u].to_string(), t[1u].to_string());
     }
     h
 }
 
 impl<'a> SVG<'a> {
-    pub fn new(width: i32, height: i32) -> SVG {
+    pub fn new(width: i32, height: i32) -> SVG<'a> {
         SVG {
             head: Head::new(width, height),
             content: String::new()
