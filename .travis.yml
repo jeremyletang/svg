@@ -7,7 +7,7 @@ before_install:
   - sudo apt-get update
 install:
   - sudo apt-get install cargo
-  - curl http://www.rust-lang.org/rustup.sh | sudo sh -
+  - curl http://static.rust-lang.org/rustup.sh | sudo sh -
 script:
   - rustc --version
   - cargo build

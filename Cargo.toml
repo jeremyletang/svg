@@ -3,7 +3,7 @@ name = "svg"
 version = "0.0.1"
 authors = ["letang.jeremy@gmail.com"]
 
-[[lib]]
+[lib]
 name = "svg"
 crate-type = ["rlib", "dylib"]
 
