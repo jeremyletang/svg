@@ -19,14 +19,14 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-use std::fmt::Show;
+use std::fmt::Debug;
 use std::collections::HashMap;
 
 use common::{insert_attribs, insert_transform, finalize};
 use transform::Transform;
 use SVGEntity;
 
-#[deriving(Show, Eq, Clone)]
+#[derive(Debug, Eq, Clone)]
 pub struct EllipticalArc {
     pub x: i32,
     pub y: i32,
