@@ -20,17 +20,19 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #![crate_name = "svg"]
-#![desc = "SVG generation in Rust"]
-#![license = "MIT"]
 #![crate_type = "dylib"]
 #![crate_type = "rlib"]
 // #![warn(missing_doc)]
 #![allow(dead_code)]
+#![feature(core)]
+#![feature(io)]
+#![feature(collections)]
 
-use std::io::{Writer, IoResult};
-use std::fmt::Show;
+use std::old_io::{Writer, IoResult};
+use std::fmt::Debug;
 use std::vec::Vec;
 use std::collections::HashMap;
+use std::num::Int;
 
 pub use shapes::{Circle, Rect, RoundedRect, Ellipse, Line, PolyLine, Polygon};
 pub use common::{rgb, rgba};
@@ -49,7 +51,7 @@ xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n";
 static STANDALONE_YES: &'static str = "<?xml version=\"1.0\" standalone=\"yes\"?>\n";
 static STANDALONE_NO: &'static str = "<?xml version=\"1.0\" standalone=\"no\"?>\n";
 
-trait SVGEntity {
+pub trait SVGEntity {
     fn gen_output(&self) -> String;
 }
 
@@ -84,7 +86,7 @@ fn make_attribs(attribs: &str) -> HashMap<String, String>{
     let mut h = HashMap::new();
     for s in attribs.split(' ') {
         let t: Vec<&str> = s.split('=').collect();
-        h.insert(t[0u].to_string(), t[1u].to_string());
+        h.insert(t[0us].to_string(), t[1us].to_string());
     }
     h
 }
@@ -203,7 +205,7 @@ impl<'a> SVG<'a> {
         }.gen_output().as_slice())
     }
 
-    pub fn polyline<T: Num + Show + Clone>(&mut self,
+    pub fn polyline<T: Int + Debug + Clone>(&mut self,
                                            points: &Vec<(T, T)>,
                                            attribs: &str) {
         self.content.push_str(PolyLine {
@@ -213,7 +215,7 @@ impl<'a> SVG<'a> {
         }.gen_output().as_slice())
     }
 
-    pub fn polygon<T: Num + Show + Clone>(&mut self,
+    pub fn polygon<T: Int + Debug + Clone>(&mut self,
                                           points: &Vec<(T, T)>,
                                           attribs: &str) {
         self.content.push_str(Polygon {
@@ -243,17 +245,17 @@ impl<'a> SVG<'a> {
                    attribs: Option<&HashMap<String, String>>) {
         self.content.push_str("<g ");
         match id {
-            Some(i) => self.content.push_str(format!("id=\"{}\" ", i).as_slice()),
+            Some(i) => self.content.push_str(format!("id=\"{:?}\" ", i).as_slice()),
             None    => {/* nothing to do */}
         }
         match transform {
-            Some(t) => self.content.push_str(format!("{} ", t.get()).as_slice()),
+            Some(t) => self.content.push_str(format!("{:?} ", t.get()).as_slice()),
             None    => {/* nothing to do */}
         }
         match attribs {
             Some(a) => {
                 for (at, value) in a.iter() {
-                    self.content.push_str(format!("{}=\"{}\" ", *at, *value).as_slice())
+                    self.content.push_str(format!("{:?}=\"{:?}\" ", *at, *value).as_slice())
                 }
             },
             None    => {/* nothing to do */}
@@ -311,21 +313,21 @@ impl<'a> SVG<'a> {
             false   => o.push_str(STANDALONE_NO)
         };
         o.push_str(DOC_TYPE);
-        o.push_str(format!("<svg width=\"{}cm\" height=\"{}cm\" ",
+        o.push_str(format!("<svg width=\"{:?}cm\" height=\"{:?}cm\" ",
                            self.head.width, self.head.height).as_slice());
         match self.head.view_box {
             Some((x, y, width, height)) => {
-                o.push_str(format!("viewBox=\"{} {} {} {}\" ", x, y, width, height).as_slice())
+                o.push_str(format!("viewBox=\"{:?} {:?} {:?} {:?}\" ", x, y, width, height).as_slice())
             },
             None                        => {/* nothing to do */}
         }
         o.push_str(XMLNS);
         match self.head.title {
-            Some(ref t) => o.push_str(format!("<title>{}</title>\n", *t).as_slice()),
+            Some(ref t) => o.push_str(format!("<title>{:?}</title>\n", *t).as_slice()),
             None    => {/* nothing to do */}
         }
         match self.head.desc {
-            Some(ref d) => o.push_str(format!("<desc>{}</desc>\n", *d).as_slice()),
+            Some(ref d) => o.push_str(format!("<desc>{:?}</desc>\n", *d).as_slice()),
             None    => {/* nothing to do */}
         }
         // Body

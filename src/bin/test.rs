@@ -19,9 +19,13 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+#![feature(io)]
+#![feature(collections)]
+#![feature(path)]
+
 extern crate svg;
 
-use std::io::{BufferedWriter, File, Truncate, ReadWrite};
+use std::old_io::{BufferedWriter, File, Truncate, ReadWrite};
 use std::collections::HashMap;
 
 use svg::SVG;
@@ -29,7 +33,7 @@ use svg::Transform;
 // use svg::{Circle, Rect, RoundedRect};
 
 pub fn main() {
-   let mut output = BufferedWriter::new(File::open_mode(&Path::new("output.svg"), Truncate, ReadWrite)).unwrap();
+   let mut output = BufferedWriter::new(File::open_mode(&Path::new("output.svg"), Truncate, ReadWrite).unwrap());
    let mut image = SVG::new(12, 12);
    let mut attribs = HashMap::new();
    let polygon_points: Vec<(i32, i32)> = vec![(350,75),  (379,161), (469,161), (397,215),
@@ -60,6 +64,6 @@ pub fn main() {
 
     match image.finalize(&mut output) {
         Ok(_)       => {},
-        Err(err)    => fail!(err)
+        Err(err)    => panic!("{}", err)
    }
 }

@@ -8,7 +8,7 @@ __libsvg__ allow you to create svg graphics using Rust.
 ```Rust
 extern crate svg;
 
-use std::io::{BufferedWriter, File, Truncate, ReadWrite};
+use std::old_io::{BufferedWriter, File, Truncate, ReadWrite};
 use svg::SVG;
 
 fn main() {
@@ -23,14 +23,14 @@ fn main() {
     image.circle(600, 200, 100, "fill=red stroke=blue stroke-width=10");
 
     // Create an ouput and export the svg image inside
-    let mut output = BufferedWriter::new(File::open_mode(&Path::new("output.svg"), 
-                                         Truncate, 
+    let mut output = BufferedWriter::new(File::open_mode(&Path::new("output.svg"),
+                                         Truncate,
                                          ReadWrite)).unwrap();
     image.finalize(&mut output);
 }
 
 ```
 
-This is the simple way to use __libsvg__. Inside the SVG object a Shape struct is 
+This is the simple way to use __libsvg__. Inside the SVG object a Shape struct is
 create to represent each object. You can too create a Shape, modify it, and add it
 to the image using the method `SVG::add()`.

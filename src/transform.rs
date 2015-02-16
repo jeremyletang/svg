@@ -19,29 +19,29 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#[deriving(Clone, Show, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Transform {
     output: String
 }
 
 pub fn translate(x: i32, y: i32) -> String {
-    format!("translate({}, {})", x, y)
+    format!("translate({:?}, {:?})", x, y)
 }
 
 pub fn rotate(angle: i32) -> String {
-    format!("rotate({})", angle)
+    format!("rotate({:?})", angle)
 }
 
 pub fn skew_x(factor: i32) -> String {
-    format!("skewX({})", factor)
+    format!("skewX({:?})", factor)
 }
 
 pub fn skew_y(factor: i32) -> String {
-    format!("skewY({})", factor)
+    format!("skewY({:?})", factor)
 }
 
 pub fn scale(x_scale: i32, y_scale: i32) -> String {
-    format!("scale({}, {})", x_scale, y_scale)
+    format!("scale({:?}, {:?})", x_scale, y_scale)
 }
 
 impl Transform {
@@ -51,7 +51,7 @@ impl Transform {
         }
     }
 
-    #[allow(unused_variable)]
+    #[allow(unused_variables)]
     fn insert(&mut self, tr: String) {
         // let len = self.output.len();
         // if self.output.char_at(len - 2) != '\"' { tr.insert_char(0, ' ') }

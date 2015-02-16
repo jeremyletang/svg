@@ -19,15 +19,16 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-use std::fmt::Show;
+use std::fmt::Debug;
 use std::vec::Vec;
 use std::collections::HashMap;
+use std::num::Int;
 
 use common::{insert_attribs, insert_transform, finalize};
 use transform::Transform;
 use SVGEntity;
 
-#[deriving(Show, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Circle {
     pub x: i32,
     pub y: i32,
@@ -36,7 +37,7 @@ pub struct Circle {
     pub transform: Option<Transform>
 }
 
-#[deriving(Show, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Ellipse {
     pub x: i32,
     pub y: i32,
@@ -46,7 +47,7 @@ pub struct Ellipse {
     pub transform: Option<Transform>
 }
 
-#[deriving(Show, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Line {
     pub x1: i32,
     pub y1: i32,
@@ -56,7 +57,7 @@ pub struct Line {
     pub transform: Option<Transform>
 }
 
-#[deriving(Show, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct RoundedRect {
     pub x: i32,
     pub y: i32,
@@ -68,7 +69,7 @@ pub struct RoundedRect {
     pub transform: Option<Transform>
 }
 
-#[deriving(Show, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Rect {
     pub x: i32,
     pub y: i32,
@@ -78,36 +79,36 @@ pub struct Rect {
     pub transform: Option<Transform>
 }
 
-#[deriving(Show, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct PolyLine<T> {
     pub points: Vec<(T, T)>,
     pub attribs: HashMap<String, String>,
     pub transform: Option<Transform>
 }
 
-#[deriving(Show, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Polygon<T> {
     pub points: Vec<(T, T)>,
     pub attribs: HashMap<String, String>,
     pub transform: Option<Transform>
 }
 
-impl<T: Num + Show> PolyLine<T> {
+impl<T: Int + Debug> PolyLine<T> {
     pub fn add_point(&mut self, x: T, y: T) {
         self.points.push((x, y))
     }
 }
 
-impl<T: Num + Show> Polygon<T> {
+impl<T: Int + Debug> Polygon<T> {
     pub fn add_point(&mut self, x: T, y: T) {
         self.points.push((x, y))
     }
 }
 
-fn get_points<T: Num + Show>(points: &Vec<(T, T)>) -> String {
+fn get_points<T: Int + Debug>(points: &Vec<(T, T)>) -> String {
     let mut p: String = String::from_str("points=\"");
     for &(ref x, ref y) in points.iter() {
-        p.push_str(format!("{},{} ", x, y).as_slice())
+        p.push_str(format!("{:?},{:?} ", x, y).as_slice())
     }
     p.push_str("\"");
     p
@@ -116,26 +117,26 @@ fn get_points<T: Num + Show>(points: &Vec<(T, T)>) -> String {
 impl SVGEntity for Circle {
     fn gen_output(&self) -> String {
         let mut o = String::new();
-        o.push_str(format!("<circle cx=\"{}\" cy=\"{}\" r=\"{}\"",
+        o.push_str(format!("<circle cx=\"{:?}\" cy=\"{:?}\" r=\"{:?}\"",
                            self.x, self.y, self.radius).as_slice());
         o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
         finalize(o)
     }
 }
 
-impl<T: Num + Show> SVGEntity for PolyLine<T> {
+impl<T: Int + Debug> SVGEntity for PolyLine<T> {
     fn gen_output(&self) -> String {
         let mut o = String::new();
-        o.push_str(format!("<polyline {}", get_points(&self.points)).as_slice());
+        o.push_str(format!("<polyline {:?}", get_points(&self.points)).as_slice());
         o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
         finalize(o)
     }
 }
 
-impl<T: Num + Show> SVGEntity for Polygon<T> {
+impl<T: Int + Debug> SVGEntity for Polygon<T> {
     fn gen_output(&self) -> String {
         let mut o = String::new();
-        o.push_str(format!("<polygon {}", get_points(&self.points)).as_slice());
+        o.push_str(format!("<polygon {:?}", get_points(&self.points)).as_slice());
         o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
         finalize(o)
     }
@@ -144,7 +145,7 @@ impl<T: Num + Show> SVGEntity for Polygon<T> {
 impl SVGEntity for Line {
     fn gen_output(&self) -> String {
         let mut o = String::new();
-        o.push_str(format!("<line x1=\"{}\" y1=\"{}\" x2=\"{}\" y2=\"{}\"",
+        o.push_str(format!("<line x1=\"{:?}\" y1=\"{:?}\" x2=\"{:?}\" y2=\"{:?}\"",
                            self.x1, self.y1, self.x2, self.y2).as_slice());
         o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
         finalize(o)
@@ -154,7 +155,7 @@ impl SVGEntity for Line {
 impl SVGEntity for Ellipse {
     fn gen_output(&self) -> String {
         let mut o = String::new();
-        o.push_str(format!("<ellipse cx=\"{}\" cy=\"{}\" rx=\"{}\" ry=\"{}\"",
+        o.push_str(format!("<ellipse cx=\"{:?}\" cy=\"{:?}\" rx=\"{:?}\" ry=\"{:?}\"",
                            self.x, self.y, self.x_radius, self.y_radius).as_slice());
         o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
         finalize(o)
@@ -164,7 +165,7 @@ impl SVGEntity for Ellipse {
 impl SVGEntity for Rect {
     fn gen_output(&self) -> String {
         let mut o = String::new();
-        o.push_str(format!("<rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\"",
+        o.push_str(format!("<rect x=\"{:?}\" y=\"{:?}\" width=\"{:?}\" height=\"{:?}\"",
                            self.x, self.y, self.width, self.height).as_slice());
         o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);
         finalize(o)
@@ -174,8 +175,8 @@ impl SVGEntity for Rect {
 impl SVGEntity for RoundedRect {
     fn gen_output(&self) -> String {
         let mut o = String::new();
-        o.push_str(format!("<rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\" \
-                           rx=\"{}\" ry=\"{}\"",
+        o.push_str(format!("<rect x=\"{:?}\" y=\"{:?}\" width=\"{:?}\" height=\"{:?}\" \
+                           rx=\"{:?}\" ry=\"{:?}\"",
                            self.x, self.y, self.width, self.height,
                            self.x_round, self.y_round).as_slice());
         o = insert_attribs(insert_transform(o, &self.transform), &self.attribs);

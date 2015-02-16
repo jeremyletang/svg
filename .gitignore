@@ -3,3 +3,4 @@ bin/
 doc/
 *.svg
 /target
+Cargo.lock
